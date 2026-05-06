@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Logo Receiver</title></head>
+<body>
+<pre id="log">Reading logo data from window.name...</pre>
+<script>
+const log = document.getElementById('log');
+function addLog(msg) { log.textContent += '\n' + msg; }
+
+(async () => {
+  const raw = window.name;
+  if (!raw || raw.length < 10) {
+    addLog('ERROR: window.name is empty or too short (' + raw.length + ')');
+    return;
+  }
+  addLog('Got ' + raw.length + ' chars from window.name, posting...');
+  try {
+    const resp = await fetch('/save-logos', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: raw
+    });
+    const result = await resp.json();
+    addLog('Saved: ' + result.saved.join(', '));
+    addLog('Failed: ' + (result.failed.length ? result.failed.join(', ') : 'none'));
+    addLog('DONE');
+    window.name = ''; // clear after use
+  } catch(e) {
+    addLog('ERROR: ' + e.message);
+  }
+})();
+</script>
+</body>
+</html>

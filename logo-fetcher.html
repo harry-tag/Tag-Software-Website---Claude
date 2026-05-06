@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Logo Fetcher</title></head>
+<body>
+<pre id="log">Starting...</pre>
+<script>
+const COMPANIES = [
+  ['vhl',          'vhlsistemas.com.br'],
+  ['quantum',      'quantum.aero'],
+  ['acom',         'acom.com'],
+  ['mps',          'mpsmonitor.com'],
+  ['euroform',     'euroform.dk'],
+  ['visium',       'visiumkms.com'],
+  ['sw',           'sw-software.com'],
+  ['inplan',       'inplan.dk'],
+  ['unionware',    'unionware.com'],
+  ['sars',         'sarssoftwareproducts.com'],
+  ['enrich',       'enrichsoftware.com'],
+  ['aim',          'aimcom.com'],
+  ['oases',        'oases.aero'],
+  ['optima',       'optimasystems.com'],
+  ['nexera',       'nexera.net'],
+  ['zafire',       'zafire.com'],
+  ['workdynamics', 'workdynamics.com'],
+  ['scholarchip',  'scholarchip.com'],
+  ['formsexpress', 'formsexpress.com'],
+  ['freicon',      'freicon.de'],
+  ['icl',          'iclsystems.com'],
+  ['celtrino',     'celtrino.com'],
+  ['bids',         'bidsandtenders.com'],
+  ['quorum',       'quoruminfotech.com'],
+  ['opensoftware', 'opensoftware.com'],
+  ['fastmedic',    'fastmedic.com'],
+  ['digitaled',    'digitaled.com'],
+  ['sadie',        'sadie.ai'],
+];
+
+const log = document.getElementById('log');
+function addLog(msg) { log.textContent += '\n' + msg; }
+
+async function fetchLogo(domain) {
+  const url = 'https://logo.clearbit.com/' + domain;
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) return null;
+    const blob = await resp.blob();
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const maxW = 200, maxH = 60;
+        let w = img.naturalWidth, h = img.naturalHeight;
+        const ratio = Math.min(maxW/w, maxH/h, 1);
+        w = Math.max(1, Math.round(w*ratio));
+        h = Math.max(1, Math.round(h*ratio));
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/png'));
+      };
+      img.onerror = () => resolve(null);
+      img.src = URL.createObjectURL(blob);
+    });
+  } catch(e) { return null; }
+}
+
+(async () => {
+  const results = {};
+  for (const [key, domain] of COMPANIES) {
+    addLog('Fetching ' + domain + '...');
+    const b64 = await fetchLogo(domain);
+    results[key] = b64 || 'NONE';
+    addLog(b64 ? '  OK (' + b64.length + ' chars)' : '  FAILED');
+  }
+
+  // POST all results to our save endpoint
+  addLog('\nSaving to server...');
+  try {
+    const resp = await fetch('/save-logos', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(results)
+    });
+    const txt = await resp.text();
+    addLog('Server response: ' + txt);
+  } catch(e) {
+    addLog('Save error: ' + e.message);
+    // Fallback: display as text to copy
+    addLog('\nFALLBACK DATA:\n' + JSON.stringify(Object.keys(results).filter(k=>results[k]!=='NONE').length) + ' logos fetched');
+  }
+  addLog('\nDone!');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="TAG Software Group — for founders and advisors. A quiet sale, a louder second act. Investment criteria, deal terms, and the four-step process." />
+<title>For Founders — TAG Software Group</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="icon" type="image/png" href="tag-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+/* ---- Scroll-driven process rail ---- */
+.proc-outer {
+  position: relative;
+  height: 100vh;
+  background: var(--paper);
+}
+
+/* Suppress the static ::before fill — we drive it with JS */
+.proc-outer .proc-line::before { display: none; }
+
+.proc-sticky {
+  position: sticky;
+  top: 68px; /* nav height */
+  padding: 96px 0;
+  /* prevent content overflowing the viewport height */
+  max-height: calc(100vh - 68px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* The JS-driven fill bar */
+.proc-line-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1px;
+  background: var(--accent);
+  width: 0%;
+}
+
+/* Step text hidden by default; revealed when .active is added */
+.proc-outer .proc-step .proc-day,
+.proc-outer .proc-step .proc-title,
+.proc-outer .proc-step .proc-body {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.proc-outer .proc-step.active .proc-day  { opacity: 1; transform: none; }
+.proc-outer .proc-step.active .proc-title { opacity: 1; transform: none; transition-delay: 0.07s; }
+.proc-outer .proc-step.active .proc-body  { opacity: 1; transform: none; transition-delay: 0.14s; }
+
+/* Mobile: disable sticky scroll — show everything flat */
+@media (max-width: 767px) {
+  .proc-outer { height: auto; }
+  .proc-sticky {
+    position: static;
+    max-height: none;
+    padding: 96px 0 64px;
+  }
+  .proc-outer .proc-step .proc-day,
+  .proc-outer .proc-step .proc-title,
+  .proc-outer .proc-step .proc-body {
+    opacity: 1;
+    transform: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <img src="tag-logo.png" alt="TAG Software Group" />
+      <span class="brand-meta">A Valsoft Group</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Approach</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="platform.html">Platform</a>
+      <a href="founders.html">For Founders</a>
+      <a href="team.html">Team</a>
+    </div>
+    <a href="contact.html" class="nav-cta">Start a conversation</a>
+    <button class="hbg" id="hbg" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mob-nav" id="mob-nav">
+    <a href="index.html">Approach</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="platform.html">Platform</a>
+    <a href="founders.html">For Founders</a>
+    <a href="team.html">Team</a>
+    <a href="contact.html">Start a conversation</a>
+  </div>
+</nav>
+
+<!-- PROCESS (scroll-driven) -->
+<div class="proc-outer" id="process">
+  <section class="process">
+    <div class="proc-sticky">
+      <div class="wrap">
+        <div class="proc-head">
+          <div class="eyebrow" style="margin-bottom:24px">Process</div>
+          <h2 class="t-h2">Four steps<br>between <em>hello</em> and wire.</h2>
+        </div>
+        <div class="proc-rail">
+          <div class="proc-line">
+            <span class="proc-line-fill" id="proc-fill"></span>
+          </div>
+          <div class="proc-grid">
+            <div class="proc-step" data-step="0">
+              <div class="proc-dot">01</div>
+              <div class="proc-day">Day 0 – 7</div>
+              <div class="proc-title">Intro &amp; <em>NDA.</em></div>
+              <div class="proc-body">A 45-minute call with two TAG operators. NDA before you share a number. We tell you in week one if we're a fit.</div>
+            </div>
+            <div class="proc-step" data-step="1">
+              <div class="proc-dot">02</div>
+              <div class="proc-day">Day 7 – 21</div>
+              <div class="proc-title">Indication &amp; LOI.</div>
+              <div class="proc-body">Light financials, customer cut, product overview. Written, non-contingent indication of value within fourteen days.</div>
+            </div>
+            <div class="proc-step" data-step="2">
+              <div class="proc-dot">03</div>
+              <div class="proc-day">Day 21 – 38</div>
+              <div class="proc-title">Diligence.</div>
+              <div class="proc-body">Two-week financial &amp; legal DD with our in-house team. No outside consultants slow-walking your weekends.</div>
+            </div>
+            <div class="proc-step" data-step="3">
+              <div class="proc-dot">04</div>
+              <div class="proc-day">Day 38 – 45</div>
+              <div class="proc-title">Sign &amp; <em>wire.</em></div>
+              <div class="proc-body">Definitive docs, sign, wire. The first board meeting of the new chapter is on the calendar before the funds clear.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOR FOUNDERS -->
+<section class="founders" id="founders">
+  <div class="wrap">
+    <div class="fnd-grid">
+      <div class="fnd-left">
+        <div class="eyebrow" style="margin-bottom:24px">For founders &amp; advisors</div>
+        <h2 class="t-h2">A quiet sale,<br>a louder <em>second act.</em></h2>
+        <div class="t-lead copy">
+          You spent years building it. The last thing it deserves
+          is a forced re-trade five years from now. Here's the deal
+          we actually offer.
+        </div>
+
+        <div class="fnd-quote">
+          "We had several offers on the table. TAG was not the highest.
+          They were the only one who asked how they could help my team
+          grow — not how fast they could exit."
+        </div>
+        <div class="fnd-quote-attr">— Portfolio founder · EHS software · Acquired by TAG</div>
+      </div>
+
+      <div class="fnd-right">
+        <div class="fnd-right-h">
+          <span><span class="pip"></span>The TAG offer</span>
+          <span>Standard terms</span>
+        </div>
+        <div class="fnd-rows">
+          <div class="fnd-row">
+            <div class="fnd-k"><strong>Hold period</strong> · time on books</div>
+            <div class="fnd-v"><em>Permanent</em></div>
+          </div>
+          <div class="fnd-row">
+            <div class="fnd-k"><strong>Brand &amp; team</strong> · post-close</div>
+            <div class="fnd-v">Untouched</div>
+          </div>
+          <div class="fnd-row">
+            <div class="fnd-k"><strong>CEO continuity</strong></div>
+            <div class="fnd-v">Stays <em>(default)</em></div>
+          </div>
+          <div class="fnd-row">
+            <div class="fnd-k"><strong>Speed to LOI</strong></div>
+            <div class="fnd-v num">14 d</div>
+          </div>
+          <div class="fnd-row">
+            <div class="fnd-k"><strong>Speed to close</strong></div>
+            <div class="fnd-v num">45 d</div>
+          </div>
+          <div class="fnd-row">
+            <div class="fnd-k"><strong>Earnouts</strong></div>
+            <div class="fnd-v">Rare</div>
+          </div>
+          <div class="fnd-row">
+            <div class="fnd-k"><strong>Re-trade rate</strong></div>
+            <div class="fnd-v num">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRITERIA -->
+<section class="criteria" id="criteria">
+  <div class="wrap">
+    <div class="crit-head">
+      <div>
+        <div class="eyebrow" style="margin-bottom:24px">Investment criteria</div>
+        <h2 class="t-h2">What we <em>look for.</em></h2>
+      </div>
+      <div>
+        <p class="t-lead">
+          A rough silhouette, not a hard filter. If you sit one or two
+          dimensions off, talk to us anyway — almost none of our 28+
+          acquisitions were exactly on-spec.
+        </p>
+      </div>
+    </div>
+
+    <table class="crit-table">
+      <thead>
+        <tr>
+          <th class="col-k">Dimension</th>
+          <th class="col-v">Target</th>
+          <th class="col-n">What it really means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-k">Revenue band</td>
+          <td class="col-v"><em>$3M – $100M</em> ARR</td>
+          <td class="col-n">We've closed deals well outside this band; it's the centre of gravity, not the wall.</td>
+        </tr>
+        <tr>
+          <td class="col-k">Business model</td>
+          <td class="col-v">Recurring &amp; mission-critical</td>
+          <td class="col-n">SaaS, on-prem with maintenance, transactional — anything customers can't realistically rip out.</td>
+        </tr>
+        <tr>
+          <td class="col-k">Vertical</td>
+          <td class="col-v">B2B / B2G · single-vertical</td>
+          <td class="col-n">We prefer software where the buyer is a director of operations, not a CIO. Boring is good.</td>
+        </tr>
+        <tr>
+          <td class="col-k">Customer count</td>
+          <td class="col-v">100+ logos</td>
+          <td class="col-n">Concentration up to 25% on a single customer is fine if the relationship is decade-grade.</td>
+        </tr>
+        <tr>
+          <td class="col-k">Geography</td>
+          <td class="col-v">North America · EU · UK · ANZ</td>
+          <td class="col-n">We operate cross-border; tax-resident jurisdiction is rarely a blocker.</td>
+        </tr>
+        <tr>
+          <td class="col-k">Profitability</td>
+          <td class="col-v">EBITDA-positive <em>preferred</em></td>
+          <td class="col-n">High-quality break-even is fine. We are not a turnaround shop, but we are patient.</td>
+        </tr>
+        <tr>
+          <td class="col-k">Seller motivation</td>
+          <td class="col-v">Permanence &gt; price</td>
+          <td class="col-n">If maximising headline price is the only goal, a strategic or PE buyer will beat us. We win on what comes after the wire.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="wrap cta-inner">
+    <div class="eyebrow on-dark" style="margin-bottom:32px;justify-content:center">Start a conversation</div>
+    <h2>If you've built<br>something <em>worth keeping</em>,<br>let's talk.</h2>
+    <div class="cta-row">
+      <a href="contact.html" class="btn btn-primary">Start a conversation &nbsp;→</a>
+      <a href="mailto:info@tagsoftwaregroup.com" class="btn btn-ghost">info@tagsoftwaregroup.com</a>
+    </div>
+    <div class="cta-meta">
+      <span>Reply within <strong>24 hours</strong></span>
+      <span>NDA before <strong>any number</strong></span>
+      <span>Direct line — <strong>no intermediaries</strong></span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <img src="tag-logo.png" alt="TAG Software Group" />
+        <p class="foot-blurb">TAG Software Group is the operating arm for vertical-market software within Valsoft Corporation. Montréal · Operating since 2014.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Group</h4>
+        <ul>
+          <li><a href="index.html">Approach</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="platform.html">Platform</a></li>
+          <li><a href="team.html">Team</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>For founders</h4>
+        <ul>
+          <li><a href="founders.html">Why TAG</a></li>
+          <li><a href="founders.html#criteria">Criteria</a></li>
+          <li><a href="contact.html">Start a conversation</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:info@tagsoftwaregroup.com">info@tagsoftwaregroup.com</a></li>
+          <li><a href="https://www.linkedin.com/company/tag-software-group" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://valsoftcorporation.com" target="_blank" rel="noopener">Valsoft Corporation</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 TAG Software Group · A Valsoft Corporation Group · Montréal, QC</span>
+      <span>Privacy · Terms</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile hamburger
+const hbg = document.getElementById('hbg');
+const mobNav = document.getElementById('mob-nav');
+hbg.addEventListener('click', () => {
+  hbg.classList.toggle('open');
+  mobNav.classList.toggle('open');
+});
+mobNav.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hbg.classList.remove('open');
+    mobNav.classList.remove('open');
+  });
+});
+
+// Scroll-driven process rail
+(function () {
+  const outer = document.querySelector('.proc-outer');
+  if (!outer) return;
+
+  const fill  = document.getElementById('proc-fill');
+  const steps = [...outer.querySelectorAll('.proc-step')];
+  const n     = steps.length;
+
+  // On mobile just reveal everything and bail
+  if (window.matchMedia('(max-width: 767px)').matches) {
+    steps.forEach(s => s.classList.add('active'));
+    fill.style.width = '100%';
+    return;
+  }
+
+  let animating = false;
+  let progress = 0;
+  let lastTime = 0;
+  const totalTime = 6000; // 6 seconds
+  const acceleration = 0.02; // per wheel event
+
+  function animate(currentTime) {
+    if (!animating) return;
+
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+
+    // Normal progress
+    progress += deltaTime / totalTime;
+    progress = Math.min(1, progress);
+
+    // Update fill
+    fill.style.width = (progress * 100) + '%';
+
+    // Update steps
+    const activeCount = Math.floor(progress * n) + 1;
+    steps.forEach((s, i) => s.classList.toggle('active', i < activeCount));
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      // Done
+      animating = false;
+      document.body.style.overflow = '';
+      fill.style.transition = '';
+    }
+  }
+
+  function startAnimation() {
+    if (animating) return;
+    animating = true;
+    progress = 0;
+    lastTime = performance.now();
+    document.body.style.overflow = 'hidden';
+
+    // Reset
+    steps.forEach(s => s.classList.remove('active'));
+    fill.style.width = '0%';
+    fill.style.transition = 'none'; // Instant
+
+    requestAnimationFrame(animate);
+  }
+
+  // IntersectionObserver to start animation when in view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        startAnimation();
+        observer.unobserve(outer); // Only once
+      }
+    });
+  }, { threshold: 0.1 }); // When 10% visible
+
+  observer.observe(outer);
+
+  // Handle scroll to accelerate
+  function handleWheel(e) {
+    if (animating && e.deltaY > 0) {
+      progress += acceleration;
+      progress = Math.min(1, progress);
+      e.preventDefault(); // Prevent any potential scroll
+    } else if (animating) {
+      e.preventDefault();
+    }
+  }
+
+  window.addEventListener('wheel', handleWheel, { passive: false });
+  window.addEventListener('touchmove', (e) => { if (animating) e.preventDefault(); }, { passive: false });
+  window.addEventListener('keydown', (e) => {
+    if (animating && (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'PageUp' || e.key === 'PageDown' || e.key === 'Home' || e.key === 'End')) {
+      e.preventDefault();
+    }
+  });
+})();
+</script>
+</body>
+</html>
