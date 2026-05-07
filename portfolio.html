@@ -48,11 +48,10 @@
   <div class="wrap">
     <div class="pf-head">
       <div>
-        <div class="eyebrow" style="margin-bottom:24px">§02 — The portfolio</div>
         <h2 class="t-h2">Twenty-eight<br>operating <em>companies.</em></h2>
       </div>
       <div class="right">
-        <div class="stat">
+        <!-- <div class="stat">
           <div class="v num">28+</div>
           <div class="k">Portfolio companies</div>
         </div>
@@ -61,9 +60,9 @@
           <div class="k">Countries</div>
         </div>
         <div class="stat">
-          <div class="v num">2014</div>
+          <div class="v num">2015</div>
           <div class="k">Founded</div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -74,111 +73,341 @@
       <button class="pf-filter" data-filter="healthcare">Healthcare</button>
       <button class="pf-filter" data-filter="aviation">Aviation</button>
       <button class="pf-filter" data-filter="logistics">Logistics</button>
+      <button class="pf-filter" data-filter="print">Print</button>
       <button class="pf-filter" data-filter="enterprise">Government &amp; Enterprise</button>
     </div>
 
-    <div class="pf-table" id="pf-table">
-      <div class="pf-row" data-cat="education">
-        <span class="idx">01</span>
-        <span class="co">DigitalEd <em>new</em></span>
-        <span class="ind">Education · STEM</span>
-        <span class="geo">Canada</span>
-        <span class="yr">Acq. 2026</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="enterprise">
-        <span class="idx">02</span>
-        <span class="co">bids&amp;tenders</span>
-        <span class="ind">Government · Procurement</span>
-        <span class="geo">Canada</span>
-        <span class="yr">Acq. 2025</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="logistics">
-        <span class="idx">03</span>
-        <span class="co">Celtrino</span>
-        <span class="ind">EDI · Logistics</span>
-        <span class="geo">Ireland · UK</span>
-        <span class="yr">Acq. 2025</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="healthcare">
-        <span class="idx">04</span>
-        <span class="co">FastMedic</span>
-        <span class="ind">Healthcare · Public Sector</span>
-        <span class="geo">Brazil</span>
-        <span class="yr">Acq. 2025</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="automotive">
-        <span class="idx">05</span>
-        <span class="co">Quorum <em>flagship</em></span>
-        <span class="ind">Automotive · DMS</span>
-        <span class="geo">Canada</span>
-        <span class="yr">Acq. 2025</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="automotive">
-        <span class="idx">06</span>
-        <span class="co">Viova</span>
-        <span class="ind">Automotive · AI</span>
-        <span class="geo">Ireland</span>
-        <span class="yr">Acq. 2025</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="enterprise">
-        <span class="idx">07</span>
-        <span class="co">Unionware</span>
-        <span class="ind">Association Management</span>
-        <span class="geo">Canada · USA</span>
-        <span class="yr">Acq. 2025</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="aviation">
-        <span class="idx">08</span>
-        <span class="co">Quantum Aviation</span>
-        <span class="ind">Aviation · Baggage</span>
-        <span class="geo">USA</span>
-        <span class="yr">Acq. 2024</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="logistics">
-        <span class="idx">09</span>
-        <span class="co">ICL Systems</span>
-        <span class="ind">Logistics · Fleet</span>
-        <span class="geo">USA</span>
-        <span class="yr">Acq. 2023</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="enterprise">
-        <span class="idx">10</span>
-        <span class="co">MPS Monitor</span>
-        <span class="ind">Managed Print Services</span>
-        <span class="geo">Italy · Global</span>
-        <span class="yr">Acq. 2022</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="education">
-        <span class="idx">11</span>
-        <span class="co">ScholarChip</span>
-        <span class="ind">Education · K–12</span>
-        <span class="geo">USA</span>
-        <span class="yr">Acq. 2021</span>
-        <span class="arr">→</span>
-      </div>
-      <div class="pf-row" data-cat="aviation">
-        <span class="idx">12</span>
-        <span class="co">Commsoft OASES</span>
-        <span class="ind">Aviation · MRO</span>
-        <span class="geo">UK · Global</span>
-        <span class="yr">Acq. 2019</span>
-        <span class="arr">→</span>
-      </div>
+    <div class="pf-grid" id="pf-grid">
+
+      <a class="pf-card" href="https://quoruminformationsystems.com" target="_blank" rel="noopener noreferrer" data-cat="automotive">
+        <div class="pf-card-logo"><img src="logos/quorum.png" alt="Quorum" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Quorum</div>
+          <div class="pf-card-desc">Enterprise software solutions for automotive dealerships and dealership management</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://viova.ai" target="_blank" rel="noopener noreferrer" data-cat="automotive">
+        <div class="pf-card-logo"><img src="logos/viova.svg" alt="Viova" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Viova</div>
+          <div class="pf-card-desc">AI-native voice agent platform built for the modern automotive dealership</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Founded 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://filaksplus.com" target="_blank" rel="noopener noreferrer" data-cat="automotive">
+        <div class="pf-card-logo"><img src="logos/FilaksPlus.png" alt="Filaks Plus" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Filaks Plus</div>
+          <div class="pf-card-desc">Dealer management systems business solutions to automotive retailers and manufacturers</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Germany</span>
+          <span class="pf-card-yr">Acq. 2023</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://aimcom.com" target="_blank" rel="noopener noreferrer" data-cat="automotive">
+        <div class="pf-card-logo"><img src="logos/aim.png" alt="AIM Computer Solutions" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">AIM Computer Solutions</div>
+          <div class="pf-card-desc">ERP business solutions for automotive production part suppliers and other manufacturers</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">USA</span>
+          <span class="pf-card-yr">Acq. 2022</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://digitaled.com" target="_blank" rel="noopener noreferrer" data-cat="education">
+        <div class="pf-card-logo"><img src="logos/digitaled.png" alt="DigitalEd" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">DigitalEd</div>
+          <div class="pf-card-desc">Online learning and assessment platform powering scalable STEM education for higher institutions</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Acq. 2026</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://scholarchip.com" target="_blank" rel="noopener noreferrer" data-cat="education">
+        <div class="pf-card-logo"><img src="logos/Scholarchip.png" alt="ScholarChip" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">ScholarChip</div>
+          <div class="pf-card-desc">Behavior management, smart ID cards, automated attendance, visitor management, and student location tracking solutions for K–12 schools</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">USA</span>
+          <span class="pf-card-yr">Acq. 2021</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://sarsgrid.com" target="_blank" rel="noopener noreferrer" data-cat="education">
+        <div class="pf-card-logo"><img src="logos/sars.png" alt="SARS Software" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">SARS Software</div>
+          <div class="pf-card-desc">Database software applications developer offering one-stop software solutions for the higher education market</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">USA</span>
+          <span class="pf-card-yr">Acq. 2019</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://fastmedic.com.br" target="_blank" rel="noopener noreferrer" data-cat="healthcare">
+        <div class="pf-card-logo"><img src="logos/FastMedic.png" alt="FastMedic" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">FastMedic</div>
+          <div class="pf-card-desc">Public healthcare management software improving efficiency, transparency, and service delivery</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Brazil</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://quantum.aero" target="_blank" rel="noopener noreferrer" data-cat="aviation">
+        <div class="pf-card-logo"><img src="logos/quantum.png" alt="Quantum Aviation" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Quantum Aviation</div>
+          <div class="pf-card-desc">Comprehensive aviation software solutions for baggage management</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">UK</span>
+          <span class="pf-card-yr">Acq. 2024</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://oases.aero" target="_blank" rel="noopener noreferrer" data-cat="aviation">
+        <div class="pf-card-logo"><img src="logos/oases.png" alt="Commsoft OASES" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Commsoft OASES</div>
+          <div class="pf-card-desc">Aviation MRO, engineering, and maintenance management software.</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">UK</span>
+          <span class="pf-card-yr">Acq. 2019</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://zafire.aero" target="_blank" rel="noopener noreferrer" data-cat="aviation">
+        <div class="pf-card-logo"><img src="logos/zafire.png" alt="Zafire" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Zafire</div>
+          <div class="pf-card-desc">Provider of global software and business solutions for Aviation and Service Management industries</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">UK</span>
+          <span class="pf-card-yr">Acq. 2023</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://celtrino.com" target="_blank" rel="noopener noreferrer" data-cat="logistics">
+        <div class="pf-card-logo"><img src="logos/Celtrino.png" alt="Celtrino" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Celtrino</div>
+          <div class="pf-card-desc">EDI managed services provider enabling secure supply chain communication and automation</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">IRELAND</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://iclsystems.com" target="_blank" rel="noopener noreferrer" data-cat="logistics">
+        <div class="pf-card-logo"><img src="logos/ICL.png" alt="ICL Systems" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">ICL Systems</div>
+          <div class="pf-card-desc">Advanced logistics software with real-time visibility, automated auditing, and emissions tracking for the finished vehicle supply chain</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">USA</span>
+          <span class="pf-card-yr">Acq. 2023</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://enrichsoftware.com" target="_blank" rel="noopener noreferrer" data-cat="logistics">
+        <div class="pf-card-logo"><img src="logos/enrich.png" alt="Enrich" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Enrich</div>
+          <div class="pf-card-desc">Software for the truck leasing industry and a leader in asset management software for professional fleet management</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">CANADA</span>
+          <span class="pf-card-yr">Acq. 2022</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://inplan.de" target="_blank" rel="noopener noreferrer" data-cat="logistics">
+        <div class="pf-card-logo"><img src="logos/inplan.png" alt="INPLAN" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">INPLAN</div>
+          <div class="pf-card-desc">Software solutions for the maritime industry, providing marine and inland logistics and procurement systems</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Germany</span>
+          <span class="pf-card-yr">Acq. 2022</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://bidsandtenders.com" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/bids.png" alt="bids&amp;tenders" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">bids&amp;tenders</div>
+          <div class="pf-card-desc">Digital procurement platform for managing bids, suppliers, and contracts in one centralized system</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://unionware.com" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/unionware.png" alt="Unionware" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Unionware</div>
+          <div class="pf-card-desc">Fully integrated union-management software designed specifically for labor unions</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://mpsmonitor.com" target="_blank" rel="noopener noreferrer" data-cat="print">
+        <div class="pf-card-logo"><img src="logos/mps.png" alt="MPS Monitor" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">MPS Monitor</div>
+          <div class="pf-card-desc">Monitoring and management of printers through a cloud-based SaaS platform</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Italy</span>
+          <span class="pf-card-yr">Acq. 2022</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://nexera.net" target="_blank" rel="noopener noreferrer" data-cat="print">
+        <div class="pf-card-logo"><img src="logos/nexera.png" alt="NEXERA" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">NEXERA</div>
+          <div class="pf-card-desc">Providing customers the most accurate, comparative copier/printer device data and benchmarks</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Acq. 2023</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://workdynamics.com" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/workdynamics.png" alt="WorkDynamics" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">WorkDynamics</div>
+          <div class="pf-card-desc">Workflow and document management solutions for the government and public sector</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Acq. 2022</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://visiumkms.com" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/visium.png" alt="VisiumKMS" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">VisiumKMS</div>
+          <div class="pf-card-desc">Software solutions for quality, safety and compliance while streamlining business processes</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">USA</span>
+          <span class="pf-card-yr">Acq. 2020</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://acom.com" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/acom.png" alt="ACOM" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">ACOM</div>
+          <div class="pf-card-desc">ACOM Systems is a leading provider of document management, intelligent workflow, and payment process automation for enterprise platforms</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">USA</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://optima.energy" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/Optima.png" alt="Optima Energy" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Optima Energy</div>
+          <div class="pf-card-desc">Utility bill management and energy sustainability tracking software.</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Canada</span>
+          <span class="pf-card-yr">Acq. 2024</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://opensoftware.it" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/OpenSoftware.png" alt="OpenSoftware" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">OpenSoftware</div>
+          <div class="pf-card-desc">Digital solutions for public administration, local governments, and law enforcement</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Italy</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://swtechnologies.com" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/sw.png" alt="S&amp;W Technologies" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">S&amp;W Technologies</div>
+          <div class="pf-card-desc">Occupational health and safety compliance management software.</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">USA</span>
+          <span class="pf-card-yr">Acq. 2020</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://vhlsistemas.com.br" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/vhl.png" alt="VHL Sistemas" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">VHL Sistemas</div>
+          <div class="pf-card-desc">Digital solutions for notary offices and legal document management.</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Brazil</span>
+          <span class="pf-card-yr">Acq. 2025</span>
+        </div>
+      </a>
+
+      <a class="pf-card" href="https://formsexpress.com.au" target="_blank" rel="noopener noreferrer" data-cat="enterprise">
+        <div class="pf-card-logo"><img src="logos/Formsexpress.png" alt="Forms Express" /></div>
+        <div class="pf-card-body">
+          <div class="pf-card-name">Forms Express</div>
+          <div class="pf-card-desc">Government billing and forms management for local councils in Australia and New Zealand.</div>
+        </div>
+        <div class="pf-card-foot">
+          <span class="pf-card-geo">Australia</span>
+          <span class="pf-card-yr">Acq. 2023</span>
+        </div>
+      </a>
+
     </div>
 
     <div class="pf-foot">
-      <span>Showing key portfolio entries — 28+ companies total</span>
-      <a href="contact.html">Enquire about our full portfolio →</a>
+      <span></span>
+      <a href="https://www.valsoftcorp.com/portfolio" target="_blank" rel="noopener noreferrer">See the full Valsoft portfolio →</a>
     </div>
   </div>
 </section>
@@ -258,21 +487,14 @@ mobNav.querySelectorAll('a').forEach(a => {
 
 // Portfolio filter
 const filterBtns = document.querySelectorAll('.pf-filter');
-const pfRows = document.querySelectorAll('.pf-row');
+const pfCards = document.querySelectorAll('.pf-card');
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const f = btn.dataset.filter;
-    pfRows.forEach((row, i) => {
-      const show = f === 'all' || row.dataset.cat === f;
-      row.style.display = show ? '' : 'none';
-      if (show) {
-        const visibleRows = [...pfRows].filter(r => r.style.display !== 'none');
-        visibleRows.forEach((r, idx) => {
-          r.querySelector('.idx').textContent = String(idx + 1).padStart(2, '0');
-        });
-      }
+    pfCards.forEach(card => {
+      card.style.display = f === 'all' || card.dataset.cat === f ? '' : 'none';
     });
   });
 });
