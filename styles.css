@@ -121,6 +121,7 @@ ul{list-style:none}
   color:var(--line-2);padding-left:12px;border-left:1px solid var(--line);
   line-height:28px;
 }
+.brand-meta:hover{color:var(--navy)}
 .nav-links{display:flex;align-items:center;gap:30px}
 .nav-links a{font-size:13.5px;color:var(--line-2);font-weight:500;position:relative;padding-bottom:2px}
 .nav-links a:hover{color:#fff}
