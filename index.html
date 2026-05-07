@@ -71,6 +71,20 @@
           <a href="contact.html" class="btn btn-primary">Sell to TAG &nbsp;→</a>
           <a href="portfolio.html" class="btn btn-ghost">View portfolio</a>
         </div>
+
+        <div class="hero-deco" aria-hidden="true">
+          <svg viewBox="30 30 379 404" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="tri" d="M232.515 397.859L143.15 350.774L232.515 303.689L232.515 397.859Z"/>
+            <path class="tri" d="M230.919 282.362L142.657 236.275L230.919 190.685L230.919 282.362Z"/>
+            <path class="tri" d="M234.364 173.855L146.647 126.776L234.364 80.687L234.364 173.855Z"/>
+            <path class="tri" d="M143.436 338.858L232.077 291.776L143.435 245.671L143.436 338.858Z"/>
+            <path class="tri" d="M143.892 224.856L230.43 178.485L143.891 132.19L143.892 224.856Z"/>
+            <path class="tri" d="M135.365 226.859L46.1495 179.774L135.364 132.688L135.365 226.859Z"/>
+            <path class="tri" d="M40.3639 281.859L129.081 234.773L40.3646 187.689L40.3639 281.859Z"/>
+            <path class="tri" d="M336.863 121.355L248.645 73.7759L336.865 27.1885L336.863 121.355Z"/>
+            <path class="tri" d="M243.865 174.356L332.583 126.775L243.864 79.6896L243.865 174.356Z"/>
+          </svg>
+        </div>
       </div>
 
       <div class="hero-right">
@@ -317,6 +331,46 @@ mobNav.querySelectorAll('a').forEach(a => {
     mobNav.classList.remove('open');
   });
 });
+
+const triangles = [...document.querySelectorAll('.hero-deco .tri')];
+if (triangles.length) {
+  function getCenter(el) {
+    const box = el.getBBox();
+    return {
+      x: box.x + box.width / 2,
+      y: box.y + box.height / 2
+    };
+  }
+
+  const centers = triangles.map(getCenter);
+
+  triangles.forEach((tri, hoveredIndex) => {
+    tri.addEventListener('mouseenter', () => {
+      const origin = centers[hoveredIndex];
+
+      triangles.forEach((target, i) => {
+        const c = centers[i];
+
+        const distance = Math.sqrt(
+          Math.pow(c.x - origin.x, 2) +
+          Math.pow(c.y - origin.y, 2)
+        );
+
+        const delay = distance * 1.4;
+
+        setTimeout(() => {
+          target.style.transform = 'rotateY(180deg) scale(0.92)';
+          target.style.opacity = '0.75';
+
+          setTimeout(() => {
+            target.style.transform = '';
+            target.style.opacity = '1';
+          }, 450);
+        }, delay);
+      });
+    });
+  });
+}
 </script>
 </body>
 </html>
