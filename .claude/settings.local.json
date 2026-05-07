@@ -4,7 +4,9 @@
       "mcp__Claude_in_Chrome__navigate",
       "mcp__Claude_in_Chrome__computer",
       "WebFetch(domain:api.anthropic.com)",
-      "mcp__Claude_in_Chrome__tabs_context_mcp"
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "WebFetch(domain:www.tagsoftwaregroup.com)",
+      "Bash(powershell -command \"Select-String -Path 'c:\\\\Users\\\\HarrisonWaddell\\\\OneDrive - Valsoft Corporation\\\\Documents\\\\Tag Software Website - Claude\\\\news-icl.html' -Pattern 'foot-bottom' | Select-Object -Expand Line\")"
     ]
   }
 }
