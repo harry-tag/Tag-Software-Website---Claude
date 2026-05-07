@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="TAG Software Group platform — shared functions every portfolio company can plug into on day one: M&A, AI, pricing, and talent." />
-<title>Platform — TAG Software Group</title>
+<meta name="description" content="TAG Software Group news — press releases, acquisition announcements, and insights from the team." />
+<title>News — TAG Software Group</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="icon" type="image/png" href="tag-logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,7 +27,7 @@
       <a href="platform.html">Platform</a>
       <a href="founders.html">For Founders</a>
       <a href="team.html">Team</a>
-      <a href="news.html">News</a>
+      <a href="news.html" class="nav-active">News</a>
     </div>
     <a href="contact.html" class="nav-cta">Start a conversation</a>
     <button class="hbg" id="hbg" aria-label="Menu">
@@ -45,84 +45,35 @@
   </div>
 </nav>
 
-<!-- PLATFORM -->
-<section class="platform" id="platform">
+<!-- NEWS -->
+<section class="latest" id="news">
   <div class="wrap">
-    <div class="plat-head">
-      <div>
-        <div class="eyebrow" style="margin-bottom:24px">§03 — Day-after-close</div>
-        <h2 class="t-h2">What changes <em>(and what doesn't)</em> after we close.</h2>
+    <div class="lt-head">
+      <div class="left">
+        <h2 class="t-h2">News &amp; <em>insights.</em></h2>
       </div>
-      <div>
-        <p class="t-lead">
-          We don't run a playbook. We run a <em>platform</em> — a set of
-          shared functions every portfolio company can plug into on day one,
-          opt out of on day two, and benchmark against the rest of
-          the network forever.
-        </p>
+      <div class="right">
+        <button class="lt-tab active" data-filter="all">All</button>
+        <button class="lt-tab" data-filter="press">Press releases</button>
+        <button class="lt-tab" data-filter="insight">Insights</button>
       </div>
     </div>
 
-    <div class="plat-grid">
-      <div class="plat-item">
-        <div class="plat-num">01.</div>
-        <div>
-          <div class="plat-title"><em>M&amp;A</em> as a service.</div>
-          <div class="plat-body">
-            A central deal team that sources and closes bolt-ons under your brand.
-            You pick the targets; we run process, diligence, and integration.
-            Most bolt-ons cleared in under 90 days.
-          </div>
-          <div class="plat-meta">
-            <span>Deal team <strong>in-house</strong></span>
-            <span>Bolt-ons <strong>ongoing</strong></span>
-          </div>
-        </div>
+    <div class="lt-grid">
+      <div class="lt-item" data-cat="press">
+        <div class="lt-meta"><span class="cat">Press release</span><span>2026</span></div>
+        <div class="lt-title">TAG completes acquisition of <em>DigitalEd</em>, expanding its education portfolio into STEM online learning.</div>
+        <div class="lt-foot">Read the release &nbsp;→</div>
       </div>
-      <div class="plat-item">
-        <div class="plat-num">02.</div>
-        <div>
-          <div class="plat-title">AI <em>infusion.</em></div>
-          <div class="plat-body">
-            ValPay (payments) and Viova (AI-native automotive) deployed across
-            the portfolio. Vertical models trained on the network's own data —
-            not a generic copilot bolted on.
-          </div>
-          <div class="plat-meta">
-            <span>Tools <strong>ValPay · Viova</strong></span>
-            <span>Network <strong>28+ cos</strong></span>
-          </div>
-        </div>
+      <div class="lt-item" data-cat="insight">
+        <div class="lt-meta"><span class="cat">Insight</span><span>2025</span></div>
+        <div class="lt-title">The case against the <em>fund clock</em> — why permanent capital wins on day 1,825.</div>
+        <div class="lt-foot">Read · 8 min &nbsp;→</div>
       </div>
-      <div class="plat-item">
-        <div class="plat-num">03.</div>
-        <div>
-          <div class="plat-title">Pricing &amp; <em>rejuvenation.</em></div>
-          <div class="plat-body">
-            Pricing reviews benchmarked against 28+ peers. Rejuvenation
-            programs to refresh stale modules. One recent move: zero churn
-            after a significant uplift across a major SKU base.
-          </div>
-          <div class="plat-meta">
-            <span>Network <strong>28+ benchmarks</strong></span>
-            <span>Churn post-uplift <strong>0%</strong></span>
-          </div>
-        </div>
-      </div>
-      <div class="plat-item">
-        <div class="plat-num">04.</div>
-        <div>
-          <div class="plat-title">Talent &amp; <em>people plan.</em></div>
-          <div class="plat-body">
-            Founder transitions, second-line recruiting, and an operator bench
-            across the portfolio. We don't slash; we slot — finding the right
-            roles for people the seller cares about.
-          </div>
-          <div class="plat-meta">
-            <span>Approach <strong>retain &amp; slot</strong></span>
-            <span>HR team <strong>dedicated</strong></span>
-          </div>
-        </div>
+      <div class="lt-item" data-cat="insight">
+        <div class="lt-meta"><span class="cat">Insight</span><span>2025</span></div>
+        <div class="lt-title">How <em>MPS Monitor</em> more than tripled revenue since joining the Valsoft portfolio.</div>
+        <div class="lt-foot">Read the story &nbsp;→</div>
       </div>
     </div>
   </div>
@@ -198,6 +149,20 @@ mobNav.querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => {
     hbg.classList.remove('open');
     mobNav.classList.remove('open');
+  });
+});
+
+// News filter tabs
+const tabs = document.querySelectorAll('.lt-tab');
+const items = document.querySelectorAll('.lt-item');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const f = tab.dataset.filter;
+    items.forEach(item => {
+      item.style.display = f === 'all' || item.dataset.cat === f ? '' : 'none';
+    });
   });
 });
 </script>
