@@ -601,9 +601,9 @@ const PAY_ARCS = [
 
     // Base dot layers — accumulate panels 0→1→2, persist for panels 3–7
     // Colors lerp toward near-black on panel 7 (Portfolio Intelligence)
-    drawDots(DATA.companies, proj, darkColor('#152D51', bk), 4,   cumOps[0] * gf, vc);
-    drawDots(DATA.people,    proj, darkColor('#C75A2C', bk), 3.5, cumOps[1] * gf, vc);
     drawDots(DATA.customers, proj, darkColor('#1F8A4C', bk), 3,   cumOps[2] * gf, vc);
+    drawDots(DATA.people,    proj, darkColor('#C75A2C', bk), 3.5, cumOps[1] * gf, vc);
+    drawDots(DATA.companies, proj, darkColor('#152D51', bk), 4,   cumOps[0] * gf, vc);
 
     // Feature overlays (panels 3–7)
     if (curPanel >= 3 && curOp > 0.01 && gf > 0.01) {
