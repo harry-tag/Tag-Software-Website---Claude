@@ -598,6 +598,53 @@ a.lt-item:hover{background:var(--paper-2)}
 .cta-meta span strong{color:#fff;font-weight:500}
 
 /* ============================================================
+   GLOBE SECTION
+============================================================ */
+.globe-sec{border-top:1px solid var(--line)}
+.globe-layout{
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  max-width:var(--max);
+  margin:0 auto;
+  padding:0 var(--gutter);
+}
+.globe-sticky-col{
+  position:sticky;top:0;height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:32px 48px 32px 0;
+}
+.globe-stage{width:min(100%,min(540px,calc(100vh - 120px)));position:relative}
+#globe-cv{display:block;width:100%;aspect-ratio:1}
+.globe-panels-col{display:flex;flex-direction:column}
+.globe-panel{
+  min-height:100vh;display:flex;align-items:center;
+  padding:80px 0 80px 64px;
+  opacity:.25;transform:translateY(20px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.globe-panel.active{opacity:1;transform:translateY(0)}
+.globe-panel-inner{max-width:380px}
+.globe-panel-inner h3{
+  font-family:var(--font-serif);font-size:clamp(26px,3vw,42px);
+  color:var(--navy);letter-spacing:-.018em;line-height:1.2;margin-bottom:20px;
+}
+.globe-panel-inner p{font-size:16px;color:var(--ink-2);line-height:1.65}
+.globe-layer-badge{
+  display:inline-flex;align-items:center;gap:10px;margin-top:28px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+}
+.globe-layer-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+@media(max-width:1080px){
+  .globe-layout{grid-template-columns:1fr}
+  .globe-sticky-col{position:relative;height:auto;padding:80px 0 40px;justify-content:center}
+  .globe-stage{max-width:440px}
+  .globe-panel{min-height:auto;padding:40px 0;opacity:1;transform:none}
+}
+@media(max-width:640px){
+  .globe-panel{padding:32px 0}
+}
+
+/* ============================================================
    ARTICLE PAGES
 ============================================================ */
 .article-pg{padding:72px 0 128px}

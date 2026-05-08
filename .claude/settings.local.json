@@ -6,7 +6,10 @@
       "WebFetch(domain:api.anthropic.com)",
       "mcp__Claude_in_Chrome__tabs_context_mcp",
       "WebFetch(domain:www.tagsoftwaregroup.com)",
-      "Bash(powershell -command \"Select-String -Path 'c:\\\\Users\\\\HarrisonWaddell\\\\OneDrive - Valsoft Corporation\\\\Documents\\\\Tag Software Website - Claude\\\\news-icl.html' -Pattern 'foot-bottom' | Select-Object -Expand Line\")"
+      "Bash(powershell -command \"Select-String -Path 'c:\\\\Users\\\\HarrisonWaddell\\\\OneDrive - Valsoft Corporation\\\\Documents\\\\Tag Software Website - Claude\\\\news-icl.html' -Pattern 'foot-bottom' | Select-Object -Expand Line\")",
+      "WebFetch(domain:www.anthropic.com)",
+      "mcp__claude_ai_EXA__web_fetch_exa",
+      "Bash(curl -s \"https://cdn.sanity.io/files/4zrzovbb/website/cca8d23a9104ef0fc87b518ec18565aa8af41205.json\")"
     ]
   }
 }
