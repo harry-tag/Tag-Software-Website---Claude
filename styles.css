@@ -752,6 +752,49 @@ a.lt-item:hover{background:var(--paper-2)}
 /* ============================================================
    FOOTER
 ============================================================ */
+/* ── CAREERS ─────────────────────────────────────────────── */
+.careers-intro{padding:128px 0 80px;background:var(--paper)}
+.careers-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:80px}
+.careers-pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid var(--navy);padding-top:40px}
+.pillar{padding-right:40px}
+.pillar:last-child{padding-right:0}
+.pillar-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);margin-bottom:10px}
+.pillar-text{font-size:14px;line-height:1.75;color:var(--ink-2)}
+
+.careers-roles{padding:80px 0;background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.roles-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px}
+.roles-filters{display:flex;gap:6px}
+.roles-filter{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:6px 12px;border:1px solid transparent;cursor:pointer}
+.roles-filter.active,.roles-filter:hover{color:var(--navy);border-color:var(--navy)}
+.roles-list{border-top:1px solid var(--line)}
+.role-item{display:flex;align-items:center;gap:24px;padding:20px 0;border-bottom:1px solid var(--line)}
+.role-main{flex:1;min-width:0}
+.role-title{font-size:15px;font-weight:500;color:var(--navy);margin-bottom:3px}
+.role-co{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.role-meta{display:flex;align-items:center;gap:16px;flex-shrink:0}
+.role-loc{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.role-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border:1px solid;flex-shrink:0}
+.role-badge--tag{color:var(--navy);border-color:var(--navy)}
+.role-badge--portco{color:var(--gain);border-color:var(--gain)}
+.role-apply{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);white-space:nowrap;transition:opacity .18s}
+.role-apply:hover{opacity:.7}
+
+.careers-bench{padding:96px 0;background:var(--navy)}
+.bench-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.bench-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:20px}
+.bench-h{font-family:var(--font-serif);font-size:clamp(26px,3vw,40px);font-weight:400;line-height:1.15;letter-spacing:-.02em;color:#fff;margin-bottom:20px}
+.bench-h em{font-style:italic;color:rgba(255,255,255,.6)}
+.bench-text{font-size:15px;line-height:1.8;color:rgba(255,255,255,.6);margin-bottom:32px}
+.bench-criteria{border-top:1px solid rgba(255,255,255,.12);padding-top:28px;display:flex;flex-direction:column;gap:12px}
+.bench-crit-item{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:rgba(255,255,255,.6);line-height:1.55}
+.bench-crit-item::before{content:"→";color:var(--accent);flex-shrink:0}
+.bench-cta{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:48px}
+.bench-cta-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:20px}
+.bench-cta-h{font-family:var(--font-serif);font-size:24px;font-weight:400;color:#fff;margin-bottom:14px;line-height:1.2}
+.bench-cta-sub{font-size:14px;line-height:1.75;color:rgba(255,255,255,.6);margin-bottom:32px}
+.bench-cta-link{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid rgba(199,90,44,.35);padding-bottom:2px;transition:border-color .18s}
+.bench-cta-link:hover{border-color:var(--accent)}
+
 .foot{background:var(--navy-2);color:rgba(255,255,255,.7);padding:64px 0 32px}
 .foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
 .foot-brand img{height:28px;margin-bottom:20px;filter:brightness(0) invert(1);opacity:.9}
@@ -792,6 +835,13 @@ a.lt-item:hover{background:var(--paper-2)}
 }
 @media (max-width:640px){
   .approach-grid,.plat-grid,.team-grid,.lt-grid,.proc-grid,.hero-index,.pf-grid{grid-template-columns:1fr}
+  .careers-head,.bench-grid{grid-template-columns:1fr;gap:40px}
+  .careers-pillars{grid-template-columns:1fr 1fr;gap:32px}
+  .pillar{padding-right:0}
+  .roles-hd{flex-direction:column;align-items:flex-start;gap:16px}
+  .role-meta{flex-wrap:wrap;gap:10px}
+  .role-loc{display:none}
+  .bench-cta{padding:32px}
   .nav-links,.nav-cta{display:none}
   .hbg{display:flex}
   .hero-index .col{border-right:none;border-bottom:1px solid var(--line)}
