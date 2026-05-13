@@ -263,10 +263,28 @@ mobNav.querySelectorAll('a').forEach(a => {
 });
 
 // ── Globe ─────────────────────────────────────────────────────
-// ============================================================
-//  PLACEHOLDER DATA — replace with real coordinates when ready.
-//  Format: [latitude, longitude]
-// ============================================================
+// Format: [latitude, longitude]
+
+// Deterministic dot multiplier — expands each anchor into up to n nearby dots.
+// Pass landFeature (d3 GeoJSON) to reject ocean points via rejection sampling.
+function expandDots(anchors, n, jitter, landFeature) {
+  return anchors.flatMap(([lat, lon], i) => {
+    let s = (i + 1) * 1664525 + 1013904223;
+    const r = () => { s = (Math.imul(s, 1664525) + 1013904223) | 0; return (s >>> 0) / 4294967296; };
+    const pts = [[lat, lon]];
+    let attempts = 0;
+    while (pts.length < n && attempts < n * 10) {
+      attempts++;
+      const newLat = +((lat + (r() - 0.5) * jitter)).toFixed(2);
+      const newLon = +((lon + (r() - 0.5) * jitter)).toFixed(2);
+      if (!landFeature || d3.geoContains(landFeature, [newLon, newLat])) {
+        pts.push([newLat, newLon]);
+      }
+    }
+    return pts;
+  });
+}
+
 const DATA = {
   // 28 portfolio company HQ locations.
   // Index 0 is the TAG hub used as source for M&A arc rendering.
@@ -335,7 +353,7 @@ const DATA = {
     [55.8, -4.0 ],  // 17  Hussain Ahmed — Hamilton, Scotland
   ],
 
-  // Customer footprint — dense global coverage
+  // Customer footprint — ~185 anchors, expanded ×10 after land data loads
   customers: [
     // North America
     [40.7,-74.0],[34.0,-118.2],[45.5,-73.6],[43.7,-79.4],[37.8,-122.4],
@@ -364,9 +382,9 @@ const DATA = {
     [12.9,77.6],[17.4,78.5],[22.6,88.4],[24.9,67.0],[33.6,73.1],
     [14.6,121.0],[10.3,123.9],[-33.9,151.2],[-37.8,145.0],[-31.9,115.9],
     [-36.9,174.8],[-43.5,172.6],[-27.5,153.0],[35.6,139.8],[36.6,127.0],
-    [39.9,116.4],[34.7,135.5],[35.2,136.9],[23.1,113.3],[30.6,114.3],
-    [26.9,75.8],[23.0,72.6],[13.1,80.3],[5.4,100.3],[11.6,104.9],
-    [21.0,105.8],[6.9,79.9],[27.7,85.3],[-41.3,174.8],[-34.0,151.1],
+    // [39.9,116.4],[34.7,135.5],[35.2,136.9],[23.1,113.3],[30.6,114.3],
+    // [26.9,75.8],[23.0,72.6],[13.1,80.3],[5.4,100.3],[11.6,104.9],
+    // [21.0,105.8],[6.9,79.9],[27.7,85.3],[-41.3,174.8],[-34.0,151.1],
     // Middle East
     [25.2,55.3],[24.7,46.7],[33.9,35.5],[31.8,35.2],[36.3,59.6],
     [33.3,44.4],[36.8,10.2],[30.1,31.3],[32.1,34.8],[26.1,50.6],
@@ -379,8 +397,8 @@ const DATA = {
     // Africa
     [-26.2,28.0],[6.4,3.4],[-1.3,36.8],[33.9,-6.9],[14.7,-17.4],
     [5.4,-4.0],[-18.9,47.5],[-4.3,15.3],[12.4,-1.5],[33.6,-7.6],
-    [36.8,3.1],[-29.9,31.0],[-25.9,32.6],[-4.0,39.7],[0.3,32.6],
-    [-6.8,39.3],[9.1,7.4],[5.6,-0.2],[3.9,11.5],[-15.4,28.3],
+    // [36.8,3.1],[-29.9,31.0],[-25.9,32.6],[-4.0,39.7],[0.3,32.6],
+    // [-6.8,39.3],[9.1,7.4],[5.6,-0.2],[3.9,11.5],[-15.4,28.3],
   ],
 };
 
@@ -420,9 +438,22 @@ const PAY_ARCS = [
   let blackOp = 0, blackTarget = 0;
   let globalFade = 1, globalFadeTarget = 1;
   let talentCount = 0;
+  let customerFade = 1, customerFadeTarget = 1;
+  let maParticles = [];      // { lat, lon, vlat, vlon, targetIdx, scale, state }
+  let maSpawnTimer = 0;
+  const maSwellOps  = new Float32Array(DATA.companies.length);
+  const radarAngles = new Float32Array(DATA.companies.length);
+  for (let i = 0; i < DATA.companies.length; i++) radarAngles[i] = (i * 2.3999) % (Math.PI * 2);
+  const radarAlphas = new Float32Array(DATA.companies.length); // per-company fade (0→1)
+  let radarCandidates  = null; // initialized lazily on first panel 6 entry
+  let activeRadarSet   = new Set();
+  let radarShiftTimer  = 0;
+  let radarOrder       = [];
+  let radarShiftPointer = 0; // sliding window tail index into radarOrder
   let animFrame = null;
   let lastTime = null;
   let worldGeo = null;
+  let landFeature = null;
   const ROTATE_SPEED = 5;
 
   const graticuleGeo = d3.geoGraticule().step([20, 20])();
@@ -431,9 +462,12 @@ const PAY_ARCS = [
   try {
     const topo = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
       .then(r => r.json());
-    worldGeo = topojson.feature(topo, topo.objects.countries);
+    worldGeo    = topojson.feature(topo, topo.objects.countries);
+    landFeature = topojson.feature(topo, topo.objects.land);
+    DATA.customers = expandDots(DATA.customers, 10, 10, landFeature);
   } catch(e) {
     console.warn('Globe: map data unavailable', e);
+    DATA.customers = expandDots(DATA.customers, 10, 10);
   }
 
   // ── Helpers ───────────────────────────────────────────────
@@ -479,7 +513,7 @@ const PAY_ARCS = [
 
   function drawPulse(dots, proj, ts, cfg, opacity, vc) {
     if (!cfg || opacity < 0.01) return;
-    const speed = 0.00040;
+    const speed = cfg.speed || 0.00040;
     dots.forEach((d, di) => {
       if (d3.geoDistance([d[1], d[0]], vc) >= Math.PI / 2) return;
       const p = proj([d[1], d[0]]);
@@ -502,10 +536,11 @@ const PAY_ARCS = [
   }
 
   // Animated arcs: comet traveling along great-circle path
-  function drawAnimatedArcs(arcs, dotSet, proj, gpath, ts, color, opacity, vc) {
+  function drawAnimatedArcs(arcs, dotSet, proj, gpath, ts, color, opacity, vc, cfg = {}) {
     if (!arcs || opacity < 0.01) return;
-    const SPEED = 0.00028;
-    const TAIL  = 0.22;
+    const SPEED = cfg.speed  || 0.00028;
+    const TAIL  = cfg.tail   || 0.22;
+    const HEAD  = cfg.headR  || 2.8;
     arcs.forEach(([a, b], ai) => {
       if (a >= dotSet.length || b >= dotSet.length) return;
       const p1 = [dotSet[a][1], dotSet[a][0]];
@@ -535,7 +570,7 @@ const PAY_ARCS = [
         ctx.globalAlpha = opacity * frac * frac * 0.95;
         ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(px[0], px[1], 2.8 * (0.4 + frac * 0.6), 0, Math.PI * 2);
+        ctx.arc(px[0], px[1], HEAD * (0.4 + frac * 0.6), 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
@@ -562,6 +597,174 @@ const PAY_ARCS = [
       ctx.fill();
     });
     ctx.restore();
+  }
+
+  // ── M&A animation params — tweak these ──────────────────────
+  const MA_CFG = {
+    maxParticles:   10,     // max dots in flight at once
+    spawnIntervalMin: 0.3, // seconds between spawns (min)
+    spawnIntervalMax: 0.7, // seconds between spawns (max)
+    spawnDistMin:   5,     // degrees from anchor (min)
+    spawnDistMax:   9,     // degrees from anchor (max)
+    gravity:        9,     // acceleration constant
+    maxAcc:         20,    // cap on acceleration
+    absorbRadius:   1.2,   // degrees — start shrinking below this
+    shrinkSpeed:    3,     // scale units per second
+    particleColor: '#6BA3E8',
+    particleRadius: 3.5,
+    swellPeak:      0.9,   // how much larger the dot grows (0.9 = 1.9× normal radius)
+    swellDecay:     3.5,   // how fast the swell deflates (units/sec)
+  };
+  const AI_CFG = {
+    pulseColor:  'rgba(58,123,200,0.28)',
+    maxRadius:   20,      // px — max ring size
+    speed:       0.00020, // animation speed
+    ringCount:   3,       // rings per dot
+  };
+
+  const PAY_CFG = {
+    color:      '#C75A2C',
+    speed:      0.00028,  // comet travel speed
+    tailLength: 0.22,     // fraction of arc length
+    headRadius: 2.8,      // px
+  };
+
+  const HIRE_CFG = {
+    sweepSpeed:    0.55,   // radians per second
+    sweepFraction: 0.065,  // sweep radius as fraction of globe diameter
+    trailAngle:    1.1,    // radians of fading trail behind leading edge
+    sweepColor:    '#C75A2C',
+    poolPerCompany:     4,   // pre-placed candidate dots per company
+    activeRadarCount:   5,   // how many companies show radar at once
+    radarShiftInterval: 3,   // seconds between each single-company swap
+    radarFadeSpeed:     1.2, // alpha per second for radar fade in/out
+    foundColor:    '#f29f7c',
+    foundRadius:   3.5,
+    foundLifetime: 3.5,    // seconds a revealed dot stays visible
+    spawnDistMin:  3,      // degrees from company anchor
+    spawnDistMax:  8,
+  };
+  // ─────────────────────────────────────────────────────────────
+
+  function spawnMAParticle() {
+    if (maParticles.filter(p => p.state === 'falling').length >= MA_CFG.maxParticles) return;
+    const ti     = Math.floor(Math.random() * DATA.companies.length);
+    const anchor = DATA.companies[ti];
+    // Rejection-sample so spawn point is on land
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist  = MA_CFG.spawnDistMin + Math.random() * (MA_CFG.spawnDistMax - MA_CFG.spawnDistMin);
+      const lat   = Math.max(-85, Math.min(85, anchor[0] + Math.sin(angle) * dist));
+      const lon   = anchor[1] + Math.cos(angle) * dist;
+      if (landFeature && !d3.geoContains(landFeature, [lon, lat])) continue;
+      maParticles.push({ lat, lon, vlat: 0, vlon: 0, targetIdx: ti, scale: 1, state: 'falling' });
+      break;
+    }
+  }
+
+  function drawMAParticles(proj, opacity, vc) {
+    if (opacity < 0.01) return;
+    // Falling acquisition dots
+    maParticles.forEach(p => {
+      if (d3.geoDistance([p.lon, p.lat], vc) >= Math.PI / 2) return;
+      const px = proj([p.lon, p.lat]);
+      if (!px) return;
+      ctx.save();
+      ctx.globalAlpha = opacity * p.scale;
+      ctx.fillStyle = MA_CFG.particleColor;
+      ctx.beginPath();
+      ctx.arc(px[0], px[1], MA_CFG.particleRadius * p.scale, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+    // Swell — redraw company dot at inflated radius that eases back to normal
+    DATA.companies.forEach((d, ci) => {
+      if (maSwellOps[ci] < 0.01) return;
+      if (d3.geoDistance([d[1], d[0]], vc) >= Math.PI / 2) return;
+      const px = proj([d[1], d[0]]);
+      if (!px) return;
+      const swellR = 4 * (1 + maSwellOps[ci] * MA_CFG.swellPeak);
+      ctx.save();
+      ctx.globalAlpha = opacity;
+      ctx.fillStyle = darkColor('#152D51', blackOp);
+      ctx.beginPath();
+      ctx.arc(px[0], px[1], swellR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function makeRadarCandidate(ci) {
+    const anchor = DATA.companies[ci];
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const geoAngle = Math.random() * Math.PI * 2;
+      const dist = HIRE_CFG.spawnDistMin + Math.random() * (HIRE_CFG.spawnDistMax - HIRE_CFG.spawnDistMin);
+      const lat  = Math.max(-85, Math.min(85, anchor[0] + Math.sin(geoAngle) * dist));
+      const lon  = anchor[1] + Math.cos(geoAngle) * dist;
+      if (landFeature && !d3.geoContains(landFeature, [lon, lat])) continue;
+      return { lat, lon, ci, alpha: 0, age: 0, active: false, prevDelta: Math.PI * 2 };
+    }
+    // Fallback: no land check
+    const geoAngle = Math.random() * Math.PI * 2;
+    const dist = HIRE_CFG.spawnDistMin;
+    return { lat: anchor[0] + Math.sin(geoAngle) * dist, lon: anchor[1] + Math.cos(geoAngle) * dist,
+             ci, alpha: 0, age: 0, active: false, prevDelta: Math.PI * 2 };
+  }
+
+  function drawRadar(proj, opacity, vc) {
+    if (opacity < 0.01) return;
+    const sweepR = logicalSize * HIRE_CFG.sweepFraction;
+    // Sweep wedge + leading edge — draw for any company with non-zero alpha
+    DATA.companies.forEach((d, ci) => {
+      if (radarAlphas[ci] < 0.01) return;
+      if (d3.geoDistance([d[1], d[0]], vc) >= Math.PI / 2) return;
+      const px = proj([d[1], d[0]]);
+      if (!px) return;
+      const a  = radarAngles[ci];
+      const ra = radarAlphas[ci];
+      ctx.save();
+      ctx.globalAlpha = opacity * ra * 0.16;
+      ctx.fillStyle = HIRE_CFG.sweepColor;
+      ctx.beginPath();
+      ctx.moveTo(px[0], px[1]);
+      ctx.arc(px[0], px[1], sweepR, a - HIRE_CFG.trailAngle, a);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = opacity * ra * 0.5;
+      ctx.strokeStyle = HIRE_CFG.sweepColor;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(px[0], px[1]);
+      ctx.lineTo(px[0] + Math.cos(a) * sweepR, px[1] + Math.sin(a) * sweepR);
+      ctx.stroke();
+      ctx.restore();
+    });
+    // Candidate dots — activate when sweep visually passes over them
+    (radarCandidates || []).forEach(c => {
+      if (radarAlphas[c.ci] < 0.01) return;
+      if (d3.geoDistance([c.lon, c.lat], vc) >= Math.PI / 2) return;
+      const compPx = proj([DATA.companies[c.ci][1], DATA.companies[c.ci][0]]);
+      const dotPx  = proj([c.lon, c.lat]);
+      if (!compPx || !dotPx) return;
+      // Edge-trigger: activate only when sweep crosses the dot's screen-space angle
+      if (!c.active) {
+        const screenAngle = Math.atan2(dotPx[1] - compPx[1], dotPx[0] - compPx[0]);
+        const a = radarAngles[c.ci];
+        const delta = ((a - screenAngle) + Math.PI * 2) % (Math.PI * 2);
+        if (c.prevDelta >= HIRE_CFG.trailAngle && delta < HIRE_CFG.trailAngle) {
+          c.active = true; c.age = 0;
+        }
+        c.prevDelta = delta;
+      }
+      if (!c.active || c.alpha < 0.01) return;
+      ctx.save();
+      ctx.globalAlpha = opacity * c.alpha * radarAlphas[c.ci];
+      ctx.fillStyle = HIRE_CFG.foundColor;
+      ctx.beginPath();
+      ctx.arc(dotPx[0], dotPx[1], HIRE_CFG.foundRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
   }
 
   // ── Draw ──────────────────────────────────────────────────
@@ -601,7 +804,7 @@ const PAY_ARCS = [
 
     // Base dot layers — accumulate panels 0→1→2, persist for panels 3–7
     // Colors lerp toward near-black on panel 7 (Portfolio Intelligence)
-    drawDots(DATA.customers, proj, darkColor('#1F8A4C', bk), 3,   cumOps[2] * gf, vc);
+    drawDots(DATA.customers, proj, darkColor('#1F8A4C', bk), 3,   cumOps[2] * gf * customerFade, vc);
     drawDots(DATA.companies, proj, darkColor('#152D51', bk), 4,   cumOps[0] * gf, vc);
     drawDots(DATA.people,    proj, darkColor('#C75A2C', bk), 3.5, cumOps[1] * gf, vc);
 
@@ -609,17 +812,17 @@ const PAY_ARCS = [
     if (curPanel >= 3 && curOp > 0.01 && gf > 0.01) {
       const op = curOp * gf;
       switch (curPanel) {
-        case 3: // M&A: constellation arcs between company dots
-          drawArcs(MA_ARCS, DATA.companies, proj, gpath, 'rgba(30,58,107,0.35)', 0.9, op);
+        case 3: // M&A: light-blue dots fall in, get gobbled by company dots
+          drawMAParticles(proj, op, vc);
           break;
         case 4: // AI: large pulsing rings
-          drawPulse(DATA.companies, proj, ts, { color:'rgba(58,123,200,0.3)', maxR:40 }, op, vc);
+          drawPulse(DATA.companies, proj, ts, { color: AI_CFG.pulseColor, maxR: AI_CFG.maxRadius, speed: AI_CFG.speed }, op, vc);
           break;
         case 5: // Payments: animated comets along arcs
-          drawAnimatedArcs(PAY_ARCS, DATA.companies, proj, gpath, ts, '#C75A2C', op, vc);
+          drawAnimatedArcs(PAY_ARCS, DATA.companies, proj, gpath, ts, PAY_CFG.color, op, vc, { speed: PAY_CFG.speed, tail: PAY_CFG.tailLength, headR: PAY_CFG.headRadius });
           break;
-        case 6: // Talent: green dots popping in
-          drawTalentDots(DATA.people, proj, op, vc);
+        case 6: // Hiring: radar sweeps find new orange operator dots
+          drawRadar(proj, op, vc);
           break;
         // Panel 7 (Portfolio Intelligence): blackOp transitions all dot colors to dark
       }
@@ -643,13 +846,95 @@ const PAY_ARCS = [
     for (let i = 0; i < 3; i++) {
       cumOps[i] += (cumTargets[i] - cumOps[i]) * 0.07;
     }
-    blackOp    += (blackTarget    - blackOp)    * 0.06;
-    globalFade += (globalFadeTarget - globalFade) * 0.05;
+    blackOp      += (blackTarget      - blackOp)      * 0.06;
+    globalFade   += (globalFadeTarget - globalFade)   * 0.05;
+    customerFade += (customerFadeTarget - customerFade) * 0.06;
+
+    // M&A acquisition particles
+    if (curPanel === 3) {
+      maSpawnTimer -= dt;
+      if (maSpawnTimer <= 0) {
+        spawnMAParticle();
+        maSpawnTimer = MA_CFG.spawnIntervalMin + Math.random() * (MA_CFG.spawnIntervalMax - MA_CFG.spawnIntervalMin);
+      }
+      maParticles.forEach(p => {
+        const target = DATA.companies[p.targetIdx];
+        const dlat = target[0] - p.lat;
+        const dlon = target[1] - p.lon;
+        const dist = Math.sqrt(dlat * dlat + dlon * dlon) + 0.001;
+        const acc  = Math.min(MA_CFG.maxAcc, MA_CFG.gravity / (dist * dist));
+        p.vlat += acc * (dlat / dist) * dt;
+        p.vlon += acc * (dlon / dist) * dt;
+        p.lat  += p.vlat * dt;
+        p.lon  += p.vlon * dt;
+        if (dist < MA_CFG.absorbRadius) {
+          p.scale = Math.max(0, p.scale - dt * MA_CFG.shrinkSpeed);
+          if (p.scale <= 0) { p.state = 'absorbed'; maSwellOps[p.targetIdx] = 1; }
+        }
+      });
+      maParticles = maParticles.filter(p => p.state !== 'absorbed');
+    } else {
+      maParticles = [];
+      maSpawnTimer = 0;
+    }
+
+    // Decay swell
+    for (let ci = 0; ci < maSwellOps.length; ci++) {
+      if (maSwellOps[ci] > 0) maSwellOps[ci] = Math.max(0, maSwellOps[ci] - dt * MA_CFG.swellDecay);
+    }
 
     if (curPanel === 6) {
-      talentCount = Math.min(DATA.people.length, talentCount + dt * 8);
-    } else if (talentCount > 0) {
-      talentCount = Math.max(0, talentCount - dt * 20);
+      // Lazy init
+      if (!radarCandidates) {
+        radarCandidates = DATA.companies.flatMap((_, ci) =>
+          Array.from({length: HIRE_CFG.poolPerCompany}, () => makeRadarCandidate(ci))
+        );
+        // Shuffled company order for cycling
+        radarOrder = Array.from({length: DATA.companies.length}, (_, i) => i);
+        for (let i = radarOrder.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [radarOrder[i], radarOrder[j]] = [radarOrder[j], radarOrder[i]];
+        }
+        radarShiftPointer = 0;
+        radarShiftTimer   = HIRE_CFG.radarShiftInterval;
+        activeRadarSet    = new Set(radarOrder.slice(0, HIRE_CFG.activeRadarCount));
+      }
+      // Shift one company at a time on timer
+      radarShiftTimer -= dt;
+      if (radarShiftTimer <= 0) {
+        // Drop the oldest company in the window, add the next one
+        const outCi = radarOrder[radarShiftPointer % radarOrder.length];
+        radarShiftPointer = (radarShiftPointer + 1) % radarOrder.length;
+        const inCi  = radarOrder[(radarShiftPointer + HIRE_CFG.activeRadarCount - 1) % radarOrder.length];
+        activeRadarSet.delete(outCi);
+        activeRadarSet.add(inCi);
+        radarCandidates.forEach(c => {
+          if (c.ci === inCi) Object.assign(c, makeRadarCandidate(c.ci));
+          else if (c.ci === outCi) { c.active = false; c.alpha = 0; }
+        });
+        radarShiftTimer = HIRE_CFG.radarShiftInterval;
+      }
+      // Lerp per-company radar opacity
+      for (let ci = 0; ci < radarAlphas.length; ci++) {
+        const tgt = activeRadarSet.has(ci) ? 1 : 0;
+        radarAlphas[ci] += (tgt - radarAlphas[ci]) * Math.min(1, HIRE_CFG.radarFadeSpeed * dt);
+      }
+      // Advance angles for active companies only
+      for (let ci = 0; ci < radarAngles.length; ci++) {
+        if (activeRadarSet.has(ci)) radarAngles[ci] += HIRE_CFG.sweepSpeed * dt;
+      }
+      radarCandidates.forEach(c => {
+        if (!activeRadarSet.has(c.ci) || !c.active) return;
+        c.age += dt;
+        const fadeIn  = Math.min(1, c.age * 5);
+        const fadeOut = Math.max(0, 1 - (c.age - HIRE_CFG.foundLifetime + 0.6) / 0.6);
+        c.alpha = fadeIn * fadeOut;
+        if (c.age >= HIRE_CFG.foundLifetime) Object.assign(c, makeRadarCandidate(c.ci));
+      });
+    } else {
+      radarCandidates = null;
+      activeRadarSet  = new Set();
+      radarAlphas.fill(0);
     }
 
     draw(ts);
@@ -666,6 +951,7 @@ const PAY_ARCS = [
       cumTargets[i] = idx >= i ? 1 : 0;
     }
     blackTarget = idx === 7 ? 1 : 0;
+    customerFadeTarget = idx >= 3 ? 0 : 1;
     document.querySelectorAll('.globe-panel').forEach((p, i) => {
       p.classList.toggle('active', i === idx);
     });
