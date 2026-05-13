@@ -270,86 +270,69 @@ mobNav.querySelectorAll('a').forEach(a => {
 const DATA = {
   // 28 portfolio company HQ locations.
   // Index 0 is the TAG hub used as source for M&A arc rendering.
+  // Duplicate cities are jittered ±0.15–0.25° so dots don't stack.
   companies: [
-    [45.5,-73.6],  //  0  TAG HQ — Montréal
-    [40.7,-74.0],  //  1  New York
-    [37.8,-122.4], //  2  San Francisco
-    [41.9,-87.6],  //  3  Chicago
-    [43.7,-79.4],  //  4  Toronto
-    [34.0,-118.2], //  5  Los Angeles
-    [51.5,-0.1],   //  6  London
-    [48.9,2.3],    //  7  Paris
-    [52.5,13.4],   //  8  Berlin
-    [41.9,12.5],   //  9  Rome
-    [40.4,-3.7],   // 10  Madrid
-    [48.2,16.4],   // 11  Vienna
-    [59.9,10.8],   // 12  Oslo
-    [55.7,12.6],   // 13  Copenhagen
-    [47.4,8.5],    // 14  Zurich
-    [35.7,139.7],  // 15  Tokyo
-    [37.6,126.9],  // 16  Seoul
-    [31.2,121.5],  // 17  Shanghai
-    [22.3,114.2],  // 18  Hong Kong
-    [1.3,103.8],   // 19  Singapore
-    [19.1,72.9],   // 20  Mumbai
-    [28.6,77.2],   // 21  Delhi
-    [-33.9,151.2], // 22  Sydney
-    [-23.5,-46.6], // 23  São Paulo
-    [-26.2,28.0],  // 24  Johannesburg
-    [30.1,31.3],   // 25  Cairo
-    [25.2,55.3],   // 26  Dubai
-    [-36.9,174.8], // 27  Auckland
+    [45.5,  -73.6 ],  //  0  TAG HQ — Montréal
+    [37.7,  -122.1],  //  1  SARS Software — Castro Valley, CA
+    [29.8,  -95.4 ],  //  2  S&W Technologies — Houston, TX
+    [29.95, -95.25],  //  3  VisiumKMS — Houston, TX (jittered)
+    [39.4,  -76.8 ],  //  4  ScholarChip — Owings Mills, MD
+    [42.5,  -83.0 ],  //  5  AIM Computer Solutions — Fraser, MI
+    [51.1,  -114.1],  //  6  Enrich — Calgary, AB
+    [51.4,   6.9  ],  //  7  INPLAN — Mülheim an der Ruhr
+    [45.5,  10.2  ],  //  8  MPS Monitor — Brescia
+    [45.4,  -75.7 ],  //  9  WorkDynamics — Ottawa, ON
+    [48.0,   7.7  ],  // 10  Filaks Plus — Bötzingen
+    [-37.8, 145.0 ],  // 11  Forms Express — Melbourne
+    [35.8,  -78.8 ],  // 12  ICL Systems — Cary, NC
+    [45.65, -73.45],  // 13  NEXERA — Montréal, QC (jittered)
+    [51.5,  -0.1  ],  // 14  Zafire — London
+    [51.65, -0.25 ],  // 15  Optima Energy — London (jittered)
+    [51.6,  -0.7  ],  // 16  Quantum Aviation — High Wycombe
+    [34.0,  -84.1 ],  // 17  ACOM — Duluth, GA
+    [45.35, -73.75],  // 18  bids&tenders — Montréal, QC (jittered)
+    [53.3,  -6.3  ],  // 19  Celtrino — Dublin
+    [-25.4, -49.3 ],  // 20  FastMedic — Curitiba
+    [45.5,  12.1  ],  // 21  OpenSoftware — Mirano (Venice area)
+    [51.25, -113.95], // 22  Quorum — Calgary, AB (jittered)
+    [49.9,  -97.1 ],  // 23  Unionware — Winnipeg, MB
+    [-27.6, -48.7 ],  // 24  VHL Sistemas — Palhoça (Florianópolis)
+    [45.65, -73.75],  // 25  Viova — Montréal (jittered)
+    [43.5,  -80.5 ],  // 26  DigitalEd — Waterloo, ON
+    [51.35,  0.05 ],  // 27  OASES (Commsoft) — London (jittered)
   ],
 
   // Operator/team distribution — dense Montréal cluster + global spread
   people: [
-    // Montréal cluster (~20 dots)
-    [45.5,-73.6],[45.6,-73.7],[45.4,-73.5],[45.7,-73.8],[45.3,-73.7],
-    [45.6,-73.5],[45.5,-73.9],[45.4,-73.6],[45.7,-73.6],[45.5,-74.0],
-    [45.3,-73.4],[45.8,-73.7],[45.5,-73.3],[45.6,-74.1],[45.2,-73.5],
-    [45.7,-73.4],[45.4,-74.1],[45.6,-73.2],[45.3,-73.9],[45.8,-73.5],
-    // Toronto
-    [43.7,-79.4],[43.8,-79.5],[43.6,-79.3],
-    // New York
-    [40.7,-74.0],[40.8,-74.1],[40.7,-73.9],
-    // San Francisco
-    [37.8,-122.4],[37.7,-122.5],
-    // Chicago
-    [41.9,-87.6],
-    // Boston
-    [42.4,-71.1],
-    // London
-    [51.5,-0.1],[51.6,-0.2],[51.5,0.1],
-    // Paris
-    [48.9,2.3],[48.8,2.4],
-    // Berlin
-    [52.5,13.4],[52.4,13.3],
-    // Amsterdam
-    [52.4,4.9],
-    // Zurich
-    [47.4,8.5],
-    // Copenhagen
-    [55.7,12.6],
-    // Singapore
-    [1.3,103.8],[1.4,103.9],
-    // Sydney
-    [-33.9,151.2],[-34.0,151.3],
-    // Tokyo
-    [35.7,139.7],[35.6,139.8],
-    // Dubai
-    [25.2,55.3],[25.3,55.4],
-    // Mumbai
-    [19.1,72.9],
-    // São Paulo
-    [-23.5,-46.6],
-    // Buenos Aires
-    [-34.6,-58.4],
-    // Johannesburg
-    [-26.2,28.0],
-    // Nairobi
-    [-1.3,36.8],
-    // Mexico City
-    [19.4,-99.1],
+    // Montréal (Sam Youssef, Costa Tagalakis, Travis Cornell, Mo Saliem,
+    //           Valeria Rother, Atom Kancachian, Vincent Gudas, Karine P.)
+    [45.52, -73.58],  //  0  Sam Youssef — Greater Montréal
+    [45.60, -73.70],  //  1  Costa Tagalakis — Montréal, QC
+    [45.42, -73.52],  //  2  Travis Cornell — Montréal (TAG HQ)
+    [45.63, -73.67],  //  3  Mo Saliem — Canada / Montréal
+    [45.44, -73.72],  //  4  Valeria Rother — Canada / Montréal
+    [45.57, -73.48],  //  5  Atom Kancachian — Greater Montréal
+    [45.48, -73.85],  //  6  Vincent Gudas — Montréal, QC
+    [45.38, -73.63],  //  7  Karine P. — Greater Montréal
+
+    // Toronto (Thomas Keenan, Abdul Mohammed, Hrithik Patel,
+    //          Harrison Waddell, Lucas Canieli, Josh Hersh)
+    [43.73, -79.45],  //  8  Thomas Keenan — Toronto, ON
+    [43.80, -79.52],  //  9  Abdul Mohammed — Toronto, ON
+    [43.60, -79.30],  // 10  Hrithik Patel — Toronto, ON
+    [43.67, -79.27],  // 11  Harrison Waddell — Toronto, ON
+    [43.84, -79.42],  // 12  Lucas Canieli — Toronto, ON
+    [43.55, -79.55],  // 13  Josh Hersh — Greater Toronto
+
+    // London (Luke Partridge, Matteo Di Quinzio)
+    [51.5, -0.1 ],  // 14  Luke Partridge — London, UK
+    [45.5,  9.2 ],  // 15  Matteo Di Quinzio — Milan, IT
+
+    // Austin, TX (Aidin Mohsenin)
+    [30.3, -97.7],  // 16  Aidin Mohsenin — Austin, TX
+
+    // Hamilton, Scotland (Hussain Ahmed)
+    [55.8, -4.0 ],  // 17  Hussain Ahmed — Hamilton, Scotland
   ],
 
   // Customer footprint — dense global coverage
@@ -361,6 +344,9 @@ const DATA = {
     [25.8,-80.2],[36.2,-86.8],[44.9,-93.1],[36.2,-115.1],[37.2,-121.9],
     [49.3,-123.1],[51.0,-114.1],[53.5,-113.5],[46.8,-71.2],[43.2,-79.8],
     [19.4,-99.1],[20.9,-89.6],[14.1,-87.2],[9.9,-84.1],[18.5,-69.9],
+    [33.8,-84.4],[27.9,-82.5],[28.5,-81.4],[30.5,-90.1],[35.5,-97.5],
+    [39.0,-84.5],[40.4,-80.0],[39.9,-82.0],[41.5,-81.7],[42.9,-78.9],
+    [44.6,-63.6],[50.5,-104.6],[52.1,-106.7],[9.0,-79.5],[13.7,-89.2],
     // Europe
     [51.5,-0.1],[48.9,2.3],[52.5,13.4],[41.9,12.5],[40.4,-3.7],
     [48.2,16.4],[50.9,4.4],[52.4,4.9],[59.9,10.8],[59.3,18.1],
@@ -368,21 +354,33 @@ const DATA = {
     [44.8,20.5],[41.0,28.9],[37.9,23.7],[38.7,-9.1],[53.3,-6.3],
     [57.0,24.1],[54.4,18.6],[50.1,8.7],[53.6,10.0],[51.1,17.0],
     [45.8,15.9],[46.1,14.5],[43.9,12.4],[42.7,23.3],[44.4,26.1],
+    [55.9,-3.2],[53.5,-2.2],[52.5,-1.9],[46.2,6.1],[45.8,4.8],
+    [43.3,5.4],[43.6,1.4],[48.8,9.2],[48.1,11.6],[51.2,6.8],
+    [50.9,6.1],[52.2,21.0],[50.1,19.9],[57.7,12.0],[55.4,12.6],
+    [63.4,10.4],[61.5,23.8],[38.4,27.1],[54.7,20.5],[43.3,17.8],
     // Asia-Pacific
     [35.7,139.7],[37.6,126.9],[31.2,121.5],[22.3,114.2],[1.3,103.8],
     [13.8,100.5],[10.8,106.7],[3.1,101.7],[19.1,72.9],[28.6,77.2],
     [12.9,77.6],[17.4,78.5],[22.6,88.4],[24.9,67.0],[33.6,73.1],
     [14.6,121.0],[10.3,123.9],[-33.9,151.2],[-37.8,145.0],[-31.9,115.9],
     [-36.9,174.8],[-43.5,172.6],[-27.5,153.0],[35.6,139.8],[36.6,127.0],
+    [39.9,116.4],[34.7,135.5],[35.2,136.9],[23.1,113.3],[30.6,114.3],
+    [26.9,75.8],[23.0,72.6],[13.1,80.3],[5.4,100.3],[11.6,104.9],
+    [21.0,105.8],[6.9,79.9],[27.7,85.3],[-41.3,174.8],[-34.0,151.1],
     // Middle East
     [25.2,55.3],[24.7,46.7],[33.9,35.5],[31.8,35.2],[36.3,59.6],
-    [33.3,44.4],[36.8,10.2],[30.1,31.3],
+    [33.3,44.4],[36.8,10.2],[30.1,31.3],[32.1,34.8],[26.1,50.6],
+    [23.6,58.6],[29.4,47.9],
     // Latin America
     [-23.5,-46.6],[-34.6,-58.4],[4.7,-74.1],[-33.5,-70.7],[10.5,-66.9],
     [-12.0,-77.1],[-17.8,-63.2],[-0.2,-78.5],[-25.3,-57.6],[8.0,-66.2],
+    [-15.8,-48.0],[-19.9,-43.9],[-30.0,-51.2],[-3.7,-38.5],[-8.0,-34.9],
+    [-12.9,-38.4],[-22.9,-47.1],[11.0,-74.8],[6.2,-75.6],[-16.5,-68.2],
     // Africa
-    [-26.2,28.0],[6.4,3.4],[-1.3,36.8],[30.1,31.3],[33.9,-6.9],
-    [14.7,-17.4],[5.4,-4.0],[-18.9,47.5],[-4.3,15.3],[12.4,-1.5],
+    [-26.2,28.0],[6.4,3.4],[-1.3,36.8],[33.9,-6.9],[14.7,-17.4],
+    [5.4,-4.0],[-18.9,47.5],[-4.3,15.3],[12.4,-1.5],[33.6,-7.6],
+    [36.8,3.1],[-29.9,31.0],[-25.9,32.6],[-4.0,39.7],[0.3,32.6],
+    [-6.8,39.3],[9.1,7.4],[5.6,-0.2],[3.9,11.5],[-15.4,28.3],
   ],
 };
 
@@ -604,8 +602,8 @@ const PAY_ARCS = [
     // Base dot layers — accumulate panels 0→1→2, persist for panels 3–7
     // Colors lerp toward near-black on panel 7 (Portfolio Intelligence)
     drawDots(DATA.customers, proj, darkColor('#1F8A4C', bk), 3,   cumOps[2] * gf, vc);
-    drawDots(DATA.people,    proj, darkColor('#C75A2C', bk), 3.5, cumOps[1] * gf, vc);
     drawDots(DATA.companies, proj, darkColor('#152D51', bk), 4,   cumOps[0] * gf, vc);
+    drawDots(DATA.people,    proj, darkColor('#C75A2C', bk), 3.5, cumOps[1] * gf, vc);
 
     // Feature overlays (panels 3–7)
     if (curPanel >= 3 && curOp > 0.01 && gf > 0.01) {
