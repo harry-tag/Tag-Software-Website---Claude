@@ -140,28 +140,28 @@
         </div>
       </div>
 
-      <!-- 06 Embedded Payments -->
+      <!-- 06 Talent & Recruitment -->
       <div class="globe-panel" data-layer="5">
         <div class="globe-panel-inner">
           <div class="plat-num">03.</div>
-          <h3>Embedded <em>payments.</em></h3>
-          <p><a href="https://www.valpay.com/" target="_blank">ValPay</a> runs payments infrastructure inside portfolio companies, adding a new revenue line and providing customers with a seamless checkout experience. All in house.</p>
-          <div class="plat-meta" style="margin-top:24px">
-            <!-- <span>Product <strong>ValPay</strong></span>
-            <span>Revenue <strong>new line</strong></span> -->
-          </div>
-        </div>
-      </div>
-
-      <!-- 07 Talent & Recruitment -->
-      <div class="globe-panel" data-layer="6">
-        <div class="globe-panel-inner">
-          <div class="plat-num">04.</div>
           <h3>Talent development<br>&amp; <em>recruitment.</em></h3>
           <p>We develop your people. Support and expand roles, and recruit the talent needed to fill gaps when we find them. Plus access to a deep operator bench across the portfolio.</p>
           <div class="plat-meta" style="margin-top:24px">
             <!-- <span>Approach <strong>develop &amp; retain</strong></span>
             <span>HR team <strong>dedicated</strong></span> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 07 Embedded Payments -->
+      <div class="globe-panel" data-layer="6">
+        <div class="globe-panel-inner">
+          <div class="plat-num">04.</div>
+          <h3>Embedded <em>payments.</em></h3>
+          <p><a href="https://www.valpay.com/" target="_blank">ValPay</a> runs payments infrastructure inside portfolio companies, adding a new revenue line and providing customers with a seamless checkout experience. All in house.</p>
+          <div class="plat-meta" style="margin-top:24px">
+            <!-- <span>Product <strong>ValPay</strong></span>
+            <span>Revenue <strong>new line</strong></span> -->
           </div>
         </div>
       </div>
@@ -415,12 +415,65 @@ const MA_ARCS = [
   [23,24],[24,25],[25,26],
 ];
 
+// PAY_NODES: companies (0-27) + customer city anchors (28+)
+// Indices 0-27 match DATA.companies exactly.
+const PAY_NODES = [
+  ...DATA.companies,
+  [40.7,  -74.0 ],  // 28 New York, NY
+  [34.0,  -118.2],  // 29 Los Angeles, CA
+  [41.9,  -87.6 ],  // 30 Chicago, IL
+  [33.4,  -112.1],  // 31 Phoenix, AZ
+  [43.7,  -79.4 ],  // 32 Toronto, ON
+  [49.3,  -123.1],  // 33 Vancouver, BC
+  [48.9,    2.3 ],  // 34 Paris, FR
+  [52.5,   13.4 ],  // 35 Berlin, DE
+  [48.2,   16.4 ],  // 36 Vienna, AT
+  [59.9,   10.7 ],  // 37 Oslo, NO
+  [-33.9,  151.2],  // 38 Sydney, AU
+  [-37.8,  145.0],  // 39 Melbourne, AU
+  [35.7,   139.7],  // 40 Tokyo, JP
+  [1.35,   103.8],  // 41 Singapore
+  [-23.5,  -46.6],  // 42 São Paulo, BR
+  [19.4,   -99.1],  // 43 Mexico City, MX
+  [6.5,      3.4],  // 44 Lagos, NG
+  [30.0,    31.2],  // 45 Cairo, EG
+  [28.6,    77.2],  // 46 Delhi, IN
+  [31.2,   121.5],  // 47 Shanghai, CN
+];
+
 const PAY_ARCS = [
+  // Cross-portfolio company arcs (revenue flowing within the network)
   [0,1],[1,6],[6,15],[15,19],[19,26],
   [1,4],[4,7],[0,4],
   [7,8],[8,17],[17,18],
   [6,9],[19,22],[23,1],
   [26,20],[18,15],
+  // Customer cities → companies (payments flowing inward)
+  [28,  4], // New York → ScholarChip
+  [28, 12], // New York → ICL Systems
+  [29,  1], // Los Angeles → SARS Software
+  [30,  5], // Chicago → AIM Computer
+  [31,  2], // Phoenix → S&W Technologies
+  [32, 26], // Toronto → DigitalEd
+  [32,  9], // Toronto → WorkDynamics
+  [33,  6], // Vancouver → Enrich
+  [34,  8], // Paris → MPS Monitor
+  [34, 14], // Paris → Zafire
+  [35,  7], // Berlin → INPLAN
+  [35, 10], // Berlin → Filaks Plus
+  [36, 21], // Vienna → OpenSoftware
+  [37, 15], // Oslo → Optima Energy
+  [38, 11], // Sydney → Forms Express
+  [39, 11], // Melbourne → Forms Express
+  [40, 21], // Tokyo → OpenSoftware
+  [41, 21], // Singapore → OpenSoftware
+  [42, 20], // São Paulo → FastMedic
+  [42, 24], // São Paulo → VHL Sistemas
+  [43,  2], // Mexico City → S&W Technologies
+  [44, 14], // Lagos → Zafire
+  [45,  7], // Cairo → INPLAN
+  [46,  8], // Delhi → MPS Monitor
+  [47, 21], // Shanghai → OpenSoftware
 ];
 
 (async function initGlobe() {
@@ -782,25 +835,72 @@ const PAY_ARCS = [
 
     ctx.clearRect(0, 0, size, size);
 
-    // Sphere fill
-    ctx.beginPath(); gpath(sphere);
-    ctx.fillStyle = '#EDEAE0'; ctx.fill();
+    const gf = globalFade;
+    const bk = blackOp;
+    const globeOp = 1 - bk; // fades to 0 as panel 7 takes over
+
+    // Sphere fill — fades transparent on Portfolio Intelligence
+    if (globeOp > 0.001) {
+      ctx.save();
+      ctx.globalAlpha = globeOp;
+      ctx.beginPath(); gpath(sphere);
+      ctx.fillStyle = '#EDEAE0'; ctx.fill();
+      ctx.restore();
+    }
 
     // Graticule
     ctx.beginPath(); gpath(graticuleGeo);
-    ctx.strokeStyle = 'rgba(21,45,81,0.08)';
+    ctx.strokeStyle = `rgba(21,45,81,${(0.08 * globeOp).toFixed(3)})`;
     ctx.lineWidth = 0.5; ctx.stroke();
 
     // Countries
     if (worldGeo) {
       ctx.beginPath(); gpath(worldGeo);
-      ctx.fillStyle = 'rgba(21,45,81,0.04)'; ctx.fill();
-      ctx.strokeStyle = 'rgba(21,45,81,0.22)';
+      ctx.fillStyle = `rgba(21,45,81,${(0.04 * globeOp).toFixed(3)})`; ctx.fill();
+      ctx.strokeStyle = `rgba(21,45,81,${(0.22 * globeOp).toFixed(3)})`;
       ctx.lineWidth = 0.65; ctx.stroke();
     }
 
-    const gf = globalFade;
-    const bk = blackOp;
+    // Back-hemisphere dots — revealed as globe fades transparent
+    if (bk > 0.01) {
+      const projAll = d3.geoOrthographic()
+        .scale(r).translate([cx, cy])
+        .rotate([rotLon, -20, 0])
+        .clipAngle(180);
+      const bbo = bk * 0.28; // back-side base opacity
+      ctx.save();
+      const custBackOp = bbo * cumOps[2] * gf * customerFade;
+      if (custBackOp > 0.005) {
+        ctx.globalAlpha = custBackOp;
+        ctx.fillStyle = darkColor('#1F8A4C', bk);
+        DATA.customers.forEach(d => {
+          if (d3.geoDistance([d[1], d[0]], vc) < Math.PI / 2) return;
+          const p = projAll([d[1], d[0]]); if (!p) return;
+          ctx.beginPath(); ctx.arc(p[0], p[1], 2.5, 0, Math.PI * 2); ctx.fill();
+        });
+      }
+      const compBackOp = bbo * cumOps[0] * gf;
+      if (compBackOp > 0.005) {
+        ctx.globalAlpha = compBackOp;
+        ctx.fillStyle = darkColor('#152D51', bk);
+        DATA.companies.forEach(d => {
+          if (d3.geoDistance([d[1], d[0]], vc) < Math.PI / 2) return;
+          const p = projAll([d[1], d[0]]); if (!p) return;
+          ctx.beginPath(); ctx.arc(p[0], p[1], 3.5, 0, Math.PI * 2); ctx.fill();
+        });
+      }
+      const peopleBackOp = bbo * cumOps[1] * gf;
+      if (peopleBackOp > 0.005) {
+        ctx.globalAlpha = peopleBackOp;
+        ctx.fillStyle = darkColor('#C75A2C', bk);
+        DATA.people.forEach(d => {
+          if (d3.geoDistance([d[1], d[0]], vc) < Math.PI / 2) return;
+          const p = projAll([d[1], d[0]]); if (!p) return;
+          ctx.beginPath(); ctx.arc(p[0], p[1], 3, 0, Math.PI * 2); ctx.fill();
+        });
+      }
+      ctx.restore();
+    }
 
     // Base dot layers — accumulate panels 0→1→2, persist for panels 3–7
     // Colors lerp toward near-black on panel 7 (Portfolio Intelligence)
@@ -818,20 +918,25 @@ const PAY_ARCS = [
         case 4: // AI: large pulsing rings
           drawPulse(DATA.companies, proj, ts, { color: AI_CFG.pulseColor, maxR: AI_CFG.maxRadius, speed: AI_CFG.speed }, op, vc);
           break;
-        case 5: // Payments: animated comets along arcs
-          drawAnimatedArcs(PAY_ARCS, DATA.companies, proj, gpath, ts, PAY_CFG.color, op, vc, { speed: PAY_CFG.speed, tail: PAY_CFG.tailLength, headR: PAY_CFG.headRadius });
-          break;
-        case 6: // Hiring: radar sweeps find new orange operator dots
+        case 5: // Hiring: radar sweeps find new orange operator dots
           drawRadar(proj, op, vc);
+          break;
+        case 6: // Payments: animated comets from customer cities to companies
+          drawAnimatedArcs(PAY_ARCS, PAY_NODES, proj, gpath, ts, PAY_CFG.color, op, vc, { speed: PAY_CFG.speed, tail: PAY_CFG.tailLength, headR: PAY_CFG.headRadius });
           break;
         // Panel 7 (Portfolio Intelligence): blackOp transitions all dot colors to dark
       }
     }
 
-    // Sphere rim
-    ctx.beginPath(); gpath(sphere);
-    ctx.strokeStyle = 'rgba(21,45,81,0.18)';
-    ctx.lineWidth = 1.5; ctx.stroke();
+    // Sphere rim — fades out with globe
+    if (globeOp > 0.001) {
+      ctx.save();
+      ctx.globalAlpha = globeOp;
+      ctx.beginPath(); gpath(sphere);
+      ctx.strokeStyle = 'rgba(21,45,81,0.18)';
+      ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.restore();
+    }
   }
 
   // ── Animation loop ────────────────────────────────────────
@@ -883,7 +988,7 @@ const PAY_ARCS = [
       if (maSwellOps[ci] > 0) maSwellOps[ci] = Math.max(0, maSwellOps[ci] - dt * MA_CFG.swellDecay);
     }
 
-    if (curPanel === 6) {
+    if (curPanel === 5) {
       // Lazy init
       if (!radarCandidates) {
         radarCandidates = DATA.companies.flatMap((_, ci) =>
@@ -951,7 +1056,7 @@ const PAY_ARCS = [
       cumTargets[i] = idx >= i ? 1 : 0;
     }
     blackTarget = idx === 7 ? 1 : 0;
-    customerFadeTarget = idx >= 3 ? 0 : 1;
+    customerFadeTarget = (idx >= 3 && idx < 6) ? 0 : 1; // hidden M&A→Talent; visible on Payments + Portfolio Intel
     document.querySelectorAll('.globe-panel').forEach((p, i) => {
       p.classList.toggle('active', i === idx);
     });
