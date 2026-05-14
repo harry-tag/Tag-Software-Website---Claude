@@ -106,7 +106,7 @@
       <div class="globe-panel" data-layer="2">
         <div class="globe-panel-inner">
           <div class="globe-layer-badge" style="margin-bottom:20px">
-            <span class="globe-layer-swatch" style="background:#1F8A4C"></span>
+            <span class="globe-layer-swatch" style="background:#d4c9b1"></span>
             <span class="eyebrow">Our reach</span>
           </div>
           <h3>Customers in<br><em>30+ countries.</em></h3>
@@ -171,7 +171,7 @@
         <div class="globe-panel-inner">
           <div class="plat-num">05.</div>
           <h3>Portfolio <em>intelligence.</em></h3>
-          <p>Every company on the same page. Shared benchmarking platform. Pricing trends, product performance, churn drivers, insights that would take a standalone business years to accumulate.</p>
+          <p>See <em>clearly</em>. Shared benchmarking platform. Pricing trends, product performance, churn drivers, insights that would take a standalone business years to accumulate.</p>
           <div class="plat-meta" style="margin-top:24px">
             <!-- <span>Benchmarks <strong>live</strong></span>
             <span>Network <strong>portfolio-wide</strong></span> -->
@@ -644,7 +644,7 @@ const PAY_ARCS = [
       if (scale < 0.005) return;
       const eased = scale < 0.5 ? 2*scale*scale : 1 - Math.pow(-2*scale+2,2)/2;
       ctx.globalAlpha = opacity * Math.min(1, eased * 3);
-      ctx.fillStyle = '#1F8A4C';
+      ctx.fillStyle = '#d4c9b1';
       ctx.beginPath();
       ctx.arc(p[0], p[1], 4.5 * Math.min(1, eased * 2.5), 0, Math.PI * 2);
       ctx.fill();
@@ -676,7 +676,7 @@ const PAY_ARCS = [
   };
 
   const PAY_CFG = {
-    color:      '#C75A2C',
+    color:      '#675939',
     speed:      0.00028,  // comet travel speed
     tailLength: 0.22,     // fraction of arc length
     headRadius: 2.8,      // px
@@ -872,7 +872,7 @@ const PAY_ARCS = [
       const custBackOp = bbo * cumOps[2] * gf * customerFade;
       if (custBackOp > 0.005) {
         ctx.globalAlpha = custBackOp;
-        ctx.fillStyle = darkColor('#1F8A4C', bk);
+        ctx.fillStyle = darkColor('#d4c9b1', bk);
         DATA.customers.forEach(d => {
           if (d3.geoDistance([d[1], d[0]], vc) < Math.PI / 2) return;
           const p = projAll([d[1], d[0]]); if (!p) return;
@@ -904,7 +904,7 @@ const PAY_ARCS = [
 
     // Base dot layers — accumulate panels 0→1→2, persist for panels 3–7
     // Colors lerp toward near-black on panel 7 (Portfolio Intelligence)
-    drawDots(DATA.customers, proj, darkColor('#1F8A4C', bk), 3,   cumOps[2] * gf * customerFade, vc);
+    drawDots(DATA.customers, proj, darkColor('#d4c9b1', bk), 3,   cumOps[2] * gf * customerFade, vc);
     drawDots(DATA.companies, proj, darkColor('#152D51', bk), 4,   cumOps[0] * gf, vc);
     drawDots(DATA.people,    proj, darkColor('#C75A2C', bk), 3.5, cumOps[1] * gf, vc);
 
