@@ -71,6 +71,99 @@
     transform: none;
   }
 }
+
+/* ---- Testimonials grid ---- */
+.tst-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.tst-card {
+  background: var(--paper-2);
+  border-radius: 8px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.tst-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+}
+.tst-q {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 0;
+  font-style: italic;
+  flex: 1;
+}
+.tst-attr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.tst-attr strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.tst-attr span {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+@media (max-width: 767px) {
+  .tst-grid { grid-template-columns: 1fr; }
+  .tst-card { padding: 28px; }
+}
+
+/* ---- FAQ accordion ---- */
+.faq-list {
+  border-top: 1px solid var(--line);
+  margin-top: 56px;
+}
+.faq-item {
+  border-bottom: 1px solid var(--line);
+}
+.faq-item summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  gap: 24px;
+  user-select: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '+';
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--ink-3);
+  flex-shrink: 0;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+}
+.faq-body {
+  padding: 0 0 28px;
+  max-width: 68ch;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
 </style>
 </head>
 <body>
@@ -86,7 +179,13 @@
       <a href="index.html">Approach</a>
       <a href="portfolio.html">Portfolio</a>
       <a href="platform.html">Platform</a>
-      <a href="founders.html">For Founders</a>
+      <div class="nav-drop-group">
+        <button class="nav-drop-toggle">For Sellers</button>
+        <div class="nav-dropdown">
+          <a href="founders.html">For Founders</a>
+          <a href="brokers.html">For Brokers</a>
+        </div>
+      </div>
       <a href="team.html">Team</a>
       <a href="news.html">News</a>
       <a href="careers.html">Careers</a>
@@ -101,6 +200,7 @@
     <a href="portfolio.html">Portfolio</a>
     <a href="platform.html">Platform</a>
     <a href="founders.html">For Founders</a>
+    <a href="brokers.html">For Brokers</a>
     <a href="team.html">Team</a>
     <a href="news.html">News</a>
     <a href="careers.html">Careers</a>
@@ -115,7 +215,8 @@
       <div class="wrap">
         <div class="proc-head">
           <div class="eyebrow" style="margin-bottom:24px">Process</div>
-          <h2 class="t-h2">Four steps<br>between <em>hello</em> and wire.</h2>
+          <h2 class="t-h2">Fast, honest, and human from intro to <em>close</em></h2>
+          <!-- <h2 class="t-h2">Four steps<br>between <em>hello</em> and wire.</h2> -->
         </div>
         <div class="proc-rail">
           <div class="proc-line">
@@ -126,25 +227,25 @@
               <div class="proc-dot">01</div>
               <div class="proc-day">Day 0 – 7</div>
               <div class="proc-title">Intro &amp; <em>NDA.</em></div>
-              <div class="proc-body">A 45-minute call with two TAG operators. NDA before you share a number. We tell you in week one if we're a fit.</div>
+              <div class="proc-body">A 45-minute call with two TAG operators. NDA before you share light financials.</div>
             </div>
             <div class="proc-step" data-step="1">
               <div class="proc-dot">02</div>
               <div class="proc-day">Day 7 – 21</div>
               <div class="proc-title">Indication &amp; LOI.</div>
-              <div class="proc-body">Light financials, customer cut, product overview. Written, non-contingent indication of value within fourteen days.</div>
+              <div class="proc-body"> Written, non-contingent indication of value within fourteen days. LOI by day 21.</div>
             </div>
             <div class="proc-step" data-step="2">
               <div class="proc-dot">03</div>
-              <div class="proc-day">Day 21 – 38</div>
+              <div class="proc-day">Day 21 – 66</div>
               <div class="proc-title">Diligence.</div>
-              <div class="proc-body">Two-week financial &amp; legal DD with our in-house team. No outside consultants slow-walking your weekends.</div>
+              <div class="proc-body">45 day financial &amp; legal DD with our in-house team. Often front-run pre exclusivity.</div>
             </div>
             <div class="proc-step" data-step="3">
               <div class="proc-dot">04</div>
-              <div class="proc-day">Day 38 – 45</div>
+              <div class="proc-day">Day 66 – 73</div>
               <div class="proc-title">Sign &amp; <em>wire.</em></div>
-              <div class="proc-body">Definitive docs, sign, wire. The first board meeting of the new chapter is on the calendar before the funds clear.</div>
+              <div class="proc-body">A nice dinner and the funds in your account.</div>
             </div>
           </div>
         </div>
@@ -153,60 +254,35 @@
   </section>
 </div>
 
-<!-- FOR FOUNDERS -->
+<!-- TESTIMONIALS -->
 <section class="founders" id="founders">
   <div class="wrap">
-    <div class="fnd-grid">
-      <div class="fnd-left">
-        <div class="eyebrow" style="margin-bottom:24px">For founders &amp; advisors</div>
-        <h2 class="t-h2">A quiet sale,<br>a louder <em>second act.</em></h2>
-        <div class="t-lead copy">
-          You spent years building it. The last thing it deserves
-          is a forced re-trade five years from now. Here's the deal
-          we actually offer.
+    <div style="margin-bottom:56px">
+      <div class="eyebrow" style="margin-bottom:24px">From founders</div>
+      <h2 class="t-h2">What they say<br>after <em>the wire.</em></h2>
+    </div>
+    <div class="tst-grid">
+      <div class="tst-card">
+        <blockquote class="tst-q">
+          "I couldn't have asked for a better fit for our employees and customers. I am extremely excited as we instantly have access to resources and paths in terms of globalization."
+        </blockquote>
+        <div class="tst-attr">
+          <img class="tst-photo" src="team-photos/jeff.jpg" alt="Jeff Siciliano" />
+          <div>
+            <strong>Jeff Siciliano</strong>
+            <span>President · <a href="https://www.aimcom.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px">AIM Computer Solutions</a></span>
+          </div>
         </div>
-
-        <div class="fnd-quote">
-          "We had several offers on the table. TAG was not the highest.
-          They were the only one who asked how they could help my team
-          grow — not how fast they could exit."
-        </div>
-        <div class="fnd-quote-attr">— Portfolio founder · EHS software · Acquired by TAG</div>
       </div>
-
-      <div class="fnd-right">
-        <div class="fnd-right-h">
-          <span><span class="pip"></span>The TAG offer</span>
-          <span>Standard terms</span>
-        </div>
-        <div class="fnd-rows">
-          <div class="fnd-row">
-            <div class="fnd-k"><strong>Hold period</strong> · time on books</div>
-            <div class="fnd-v"><em>Permanent</em></div>
-          </div>
-          <div class="fnd-row">
-            <div class="fnd-k"><strong>Brand &amp; team</strong> · post-close</div>
-            <div class="fnd-v">Untouched</div>
-          </div>
-          <div class="fnd-row">
-            <div class="fnd-k"><strong>CEO continuity</strong></div>
-            <div class="fnd-v">Stays <em>(default)</em></div>
-          </div>
-          <div class="fnd-row">
-            <div class="fnd-k"><strong>Speed to LOI</strong></div>
-            <div class="fnd-v num">14 d</div>
-          </div>
-          <div class="fnd-row">
-            <div class="fnd-k"><strong>Speed to close</strong></div>
-            <div class="fnd-v num">45 d</div>
-          </div>
-          <div class="fnd-row">
-            <div class="fnd-k"><strong>Earnouts</strong></div>
-            <div class="fnd-v">Rare</div>
-          </div>
-          <div class="fnd-row">
-            <div class="fnd-k"><strong>Re-trade rate</strong></div>
-            <div class="fnd-v num">0%</div>
+      <div class="tst-card">
+        <blockquote class="tst-q">
+          "Joining forces with TAG represents an exciting new chapter, as we leverage their resources and expertise to accelerate innovation and strengthen our solutions."
+        </blockquote>
+        <div class="tst-attr">
+          <img class="tst-photo" src="team-photos/Jon.jpg" alt="Jonathan Cleiton Alves" />
+          <div>
+            <strong>Jonathan Cleiton Alves</strong>
+            <span>Partner and CEO · <a href="https://vhlsistemas.com.br/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px">VHL</a></span>
           </div>
         </div>
       </div>
@@ -214,69 +290,59 @@
   </div>
 </section>
 
-<!-- CRITERIA -->
-<section class="criteria" id="criteria">
+<!-- FAQ -->
+<section class="criteria" id="faq">
   <div class="wrap">
     <div class="crit-head">
       <div>
-        <div class="eyebrow" style="margin-bottom:24px">Investment criteria</div>
-        <h2 class="t-h2">What we <em>look for.</em></h2>
+        <div class="eyebrow" style="margin-bottom:24px">FAQ</div>
+        <h2 class="t-h2">Helpful<em> answers</em> to common<em> questions</em></h2>
       </div>
       <div>
         <p class="t-lead">
-          A rough silhouette, not a hard filter. If you sit one or two
-          dimensions off, talk to us anyway — almost none of our 28+
-          acquisitions were exactly on-spec.
+          The things worth knowing before you pick up the phone.
         </p>
       </div>
     </div>
 
-    <table class="crit-table">
-      <thead>
-        <tr>
-          <th class="col-k">Dimension</th>
-          <th class="col-v">Target</th>
-          <th class="col-n">What it really means</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="col-k">Revenue band</td>
-          <td class="col-v"><em>$3M – $100M</em> ARR</td>
-          <td class="col-n">We've closed deals well outside this band; it's the centre of gravity, not the wall.</td>
-        </tr>
-        <tr>
-          <td class="col-k">Business model</td>
-          <td class="col-v">Recurring &amp; mission-critical</td>
-          <td class="col-n">SaaS, on-prem with maintenance, transactional — anything customers can't realistically rip out.</td>
-        </tr>
-        <tr>
-          <td class="col-k">Vertical</td>
-          <td class="col-v">B2B / B2G · single-vertical</td>
-          <td class="col-n">We prefer software where the buyer is a director of operations, not a CIO. Boring is good.</td>
-        </tr>
-        <tr>
-          <td class="col-k">Customer count</td>
-          <td class="col-v">100+ logos</td>
-          <td class="col-n">Concentration up to 25% on a single customer is fine if the relationship is decade-grade.</td>
-        </tr>
-        <tr>
-          <td class="col-k">Geography</td>
-          <td class="col-v">North America · EU · UK · ANZ</td>
-          <td class="col-n">We operate cross-border; tax-resident jurisdiction is rarely a blocker.</td>
-        </tr>
-        <tr>
-          <td class="col-k">Profitability</td>
-          <td class="col-v">EBITDA-positive <em>preferred</em></td>
-          <td class="col-n">High-quality break-even is fine. We are not a turnaround shop, but we are patient.</td>
-        </tr>
-        <tr>
-          <td class="col-k">Seller motivation</td>
-          <td class="col-v">Permanence &gt; price</td>
-          <td class="col-n">If maximising headline price is the only goal, a strategic or PE buyer will beat us. We win on what comes after the wire.</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>What makes TAG different from other buyers?</summary>
+        <div class="faq-body">We buy, hold, and grow businesses permanently, not for short-term resale. We are funded by Valsoft and do not require external financing to complete our acquisitions.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What is your acquisition model?</summary>
+        <div class="faq-body">We follow a permanent capital approach: we acquire to hold and support, not to sell. We follow a decentralized model; acquired companies retain their brand, team and ability to make decisions.</div>
+      </details>
+      <!-- <details class="faq-item">
+        <summary>How long does an acquisition usually take?</summary>
+        <div class="faq-body">Timeframes vary, but we are known for running efficient, transparent processes. We have completed acquisitions in as little as 45 days.</div>
+      </details> -->
+      <details class="faq-item">
+        <summary>Can I be involved after the sale?</summary>
+        <div class="faq-body">Yes — many founders remain involved, and leadership continuity is encouraged.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Do you replace management teams?</summary>
+        <div class="faq-body">No — we prefer to back existing leaders and teams, but we can supplement as needed.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What happens to my employees after the sale?</summary>
+        <div class="faq-body">Your employees remain with the business, with continuity in roles, location, compensation and culture.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Will my company keep its identity?</summary>
+        <div class="faq-body">Yes — your company keeps its brand, culture, and way of working.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Do you ever sell the companies you acquire?</summary>
+        <div class="faq-body">No — our model is permanent ownership with sustainable growth.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I speak with other founders who have sold to TAG?</summary>
+        <div class="faq-body">Yes — we are happy to connect you with leaders from our portfolio.</div>
+      </details>
+    </div>
   </div>
 </section>
 
@@ -316,10 +382,10 @@
         </ul>
       </div>
       <div class="foot-col">
-        <h4>For founders</h4>
+        <h4>For Sellers</h4>
         <ul>
-          <li><a href="founders.html">Why TAG</a></li>
-          <li><a href="founders.html#criteria">Criteria</a></li>
+          <li><a href="founders.html">For Founders</a></li>
+          <li><a href="brokers.html">For Brokers</a></li>
           <li><a href="contact.html">Start a conversation</a></li>
         </ul>
       </div>
