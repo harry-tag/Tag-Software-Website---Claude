@@ -11,6 +11,43 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<style>
+.careers-intro {
+  position: relative;
+  overflow: hidden;
+}
+.careers-intro-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+.careers-intro-shader {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,14,26,0.72) 0%,
+    rgba(10,14,26,0.62) 60%,
+    rgba(10,14,26,0.80) 100%
+  );
+  pointer-events: none;
+}
+.careers-intro-content {
+  position: relative;
+  z-index: 2;
+}
+.careers-intro .eyebrow { color: rgba(255,255,255,0.55); }
+.careers-intro .t-h2,
+.careers-intro .t-h2 em { color: #fff; }
+.careers-intro .t-lead { color: rgba(255,255,255,0.85); }
+.careers-intro .pillar-label { color: #fff; }
+.careers-intro .pillar-text { color: rgba(255,255,255,0.65); }
+</style>
 </head>
 <body>
 
@@ -56,7 +93,9 @@
 
 <!-- INTRO -->
 <section class="careers-intro">
-  <div class="wrap">
+  <img src="team-photos/culture.png" alt="" class="careers-intro-bg" aria-hidden="true" />
+  <div class="careers-intro-shader"></div>
+  <div class="wrap careers-intro-content">
 
     <div class="careers-head">
       <div>
@@ -65,25 +104,23 @@
       </div>
       <div>
         <p class="t-lead">
-          TAG is a small team that punches above its weight. We acquire and operate
-          vertical software businesses — and we look for people who've done hard things
-          and want to do them again, with more ownership, in a more interesting context.
+          TAG is constantly evolving, but at its core it is a meritocracy. We look for people with high potential, curiosity, and drive, and give them ownership over meaningful work from day one.
         </p>
-        <p style="margin-top:20px;font-size:15px;line-height:1.75;color:var(--ink-2)">
+        <p style="margin-top:20px;font-size:15px;line-height:1.75;color:rgba(255,255,255,0.65)">
           We don't have a fund to return. We think in decades, not quarters.
-          That changes the kind of work you do and the kind of person who thrives here.
+          The people who thrive here are the ones who want to be measured by what they actually create.
         </p>
       </div>
     </div>
 
     <div class="careers-pillars">
       <div class="pillar">
-        <div class="pillar-label">Operator-first</div>
-        <div class="pillar-text">Every person on the team has a real job. We don't carry overhead. If you're here, you're building something.</div>
+        <div class="pillar-label">Cutting-Edge</div>
+        <div class="pillar-text">We donb't stand still. If you're here, you're building something, challenging what exists, and expanding the frontier.</div>
       </div>
       <div class="pillar">
         <div class="pillar-label">Build to keep</div>
-        <div class="pillar-text">We buy businesses to run them — permanently. Your work has a longer half-life here than at a fund or a startup.</div>
+        <div class="pillar-text">We buy businesses to run them permanently. Ideal for those that want to build something lasting.</div>
       </div>
       <div class="pillar">
         <div class="pillar-label">Global reach</div>
@@ -91,7 +128,7 @@
       </div>
       <div class="pillar">
         <div class="pillar-label">Move fast</div>
-        <div class="pillar-text">Small team, short chains of command. Good ideas get implemented. Bad ones get killed quickly. No bureaucracy.</div>
+        <div class="pillar-text">Small team, tinkerers culture. Good ideas get implemented. Bad ones get killed quickly. No bureaucracy.</div>
       </div>
     </div>
 
