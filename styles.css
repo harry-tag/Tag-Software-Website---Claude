@@ -832,6 +832,7 @@ a.lt-item:hover{background:var(--paper-2)}
 .foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
 .foot-brand img{height:28px;margin-bottom:20px;filter:brightness(0) invert(1);opacity:.9}
 .foot-blurb{font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.5);max-width:36ch}
+.foot-blurb a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)}
 .foot-col h4{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:500;margin-bottom:18px}
 .foot-col ul{display:flex;flex-direction:column;gap:10px}
 .foot-col a{font-size:13.5px;color:rgba(255,255,255,.8)}
