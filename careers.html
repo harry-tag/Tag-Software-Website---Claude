@@ -12,6 +12,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
 <style>
+.rf-select {
+  height: 36px;
+  padding: 0 32px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.rf-select:focus { outline: none; border-color: var(--ink-3); }
+.roles-filters { flex-wrap: wrap; }
 .careers-intro {
   position: relative;
   overflow: hidden;
@@ -148,9 +167,24 @@
         </p>
       </div>
       <div class="roles-filters">
-        <button class="roles-filter active" data-rf="all">All</button>
-        <button class="roles-filter" data-rf="tag">TAG</button>
-        <button class="roles-filter" data-rf="portco">Portfolio</button>
+        <select class="rf-select" id="rf-exp">
+          <option value="all">Experience level</option>
+          <option value="intern">Internship</option>
+          <option value="entry">Entry-level</option>
+          <option value="mid">Mid-level</option>
+          <option value="senior">Senior / Director</option>
+        </select>
+        <select class="rf-select" id="rf-geo">
+          <option value="all">Location</option>
+          <option value="canada">Canada</option>
+          <option value="brazil">Brazil</option>
+          <option value="remote">Remote</option>
+          <option value="usa">USA</option>
+          <option value="uk">UK</option>
+        </select>
+        <select class="rf-select" id="rf-co">
+          <option value="all">Company</option>
+        </select>
       </div>
     </div>
 
@@ -158,7 +192,7 @@
 <!-- JOBS-START -->
 
       <!-- TAG roles -->
-      <div class="role-item" data-type="tag">
+      <div class="role-item" data-type="tag" data-exp="intern" data-geo="canada" data-co="tag">
         <div class="role-main">
           <div class="role-title">M&amp;A Internship — Fall Semester</div>
           <div class="role-co">TAG Software Group</div>
@@ -169,7 +203,7 @@
           <a href="https://www.linkedin.com/jobs/view/4416980815/" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="tag">
+      <div class="role-item" data-type="tag" data-exp="senior" data-geo="canada" data-co="tag">
         <div class="role-main">
           <div class="role-title">Managing Director (NAM)</div>
           <div class="role-co">TAG Software Group</div>
@@ -180,7 +214,7 @@
           <a href="https://www.linkedin.com/jobs/view/4409440814/" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="tag">
+      <div class="role-item" data-type="tag" data-exp="mid" data-geo="canada" data-co="tag">
         <div class="role-main">
           <div class="role-title">AI Customer Success Manager</div>
           <div class="role-co">TAG Software Group</div>
@@ -191,7 +225,7 @@
           <a href="https://www.linkedin.com/jobs/view/4419555312/" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="tag">
+      <div class="role-item" data-type="tag" data-exp="entry" data-geo="brazil" data-co="tag">
         <div class="role-main">
           <div class="role-title">M&amp;A Business Development Analyst</div>
           <div class="role-co">TAG Software Group</div>
@@ -204,7 +238,7 @@
       </div>
 
       <!-- Portfolio roles -->
-      <div class="role-item" data-type="portco">
+      <div class="role-item" data-type="portco" data-exp="mid" data-geo="remote" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Assistant Controller</div>
           <div class="role-co">Quorum · TELECOMMUTE</div>
@@ -215,7 +249,7 @@
           <a href="https://jobs.workable.com/view/k23EbBjFcohtrubSova2k2/remote-assistant-controller-in-st.-john's-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="portco">
+      <div class="role-item" data-type="portco" data-exp="mid" data-geo="remote" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Assistant Controller</div>
           <div class="role-co">Quorum · TELECOMMUTE</div>
@@ -226,7 +260,7 @@
           <a href="https://jobs.workable.com/view/oDKEnKTVfqJohvES5KmijV/remote-assistant-controller-in-saskatoon-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="portco">
+      <div class="role-item" data-type="portco" data-exp="mid" data-geo="remote" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Assistant Controller</div>
           <div class="role-co">Quorum · TELECOMMUTE</div>
@@ -237,7 +271,7 @@
           <a href="https://jobs.workable.com/view/uvNavSr8PJL6p4eMN1Dicr/remote-assistant-controller-in-winnipeg-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="portco">
+      <div class="role-item" data-type="portco" data-exp="mid" data-geo="remote" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Assistant Controller</div>
           <div class="role-co">Quorum · TELECOMMUTE</div>
@@ -248,7 +282,7 @@
           <a href="https://jobs.workable.com/view/vAH7BN7yrhFsjQ2HYgwS3b/remote-assistant-controller-in-montreal-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="portco">
+      <div class="role-item" data-type="portco" data-exp="entry" data-geo="remote" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Financial Analyst, Corporate Finance</div>
           <div class="role-co">Quorum · TELECOMMUTE</div>
@@ -259,7 +293,7 @@
           <a href="https://jobs.workable.com/view/6qEjWzGH4EAAxNE7SV1HNP/remote-financial-analyst%2C-corporate-finance-in-new-brunswick-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="portco">
+      <div class="role-item" data-type="portco" data-exp="entry" data-geo="remote" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Financial Analyst, Corporate Finance</div>
           <div class="role-co">Quorum · TELECOMMUTE</div>
@@ -270,7 +304,7 @@
           <a href="https://jobs.workable.com/view/stzbwDBSkp7yAKtCNeRjM2/remote-financial-analyst%2C-corporate-finance-in-montreal-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="portco">
+      <div class="role-item" data-type="portco" data-exp="entry" data-geo="remote" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Financial Analyst, Corporate Finance</div>
           <div class="role-co">Quorum · TELECOMMUTE</div>
@@ -355,7 +389,7 @@
     <div class="foot-top">
       <div class="foot-brand">
         <img src="tag-logo.png" alt="TAG Software Group" />
-        <p class="foot-blurb">TAG Software Group is the operating arm for vertical-market software within Valsoft Corporation.</p>
+        <p class="foot-blurb">TAG Software Group is the operating arm for vertical-market software within <a href="https://www.valsoftcorp.com/" target="_blank" rel="noopener">Valsoft Corporation</a>.</p>
       </div>
       <div class="foot-col">
         <h4>Group</h4>
@@ -405,18 +439,71 @@ mobNav.querySelectorAll('a').forEach(a => {
   });
 });
 
-// Roles filter
-const rfBtns = document.querySelectorAll('.roles-filter');
-rfBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    rfBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const f = btn.dataset.rf;
-    document.querySelectorAll('.role-item').forEach(item => {
-      item.style.display = f === 'all' || item.dataset.type === f ? '' : 'none';
+// Roles filters — faceted (each dropdown reflects the other active filters)
+const RF_FILTERS = [
+  { id: 'rf-exp', key: 'exp' },
+  { id: 'rf-geo', key: 'geo' },
+  { id: 'rf-co',  key: 'co'  },
+];
+const allRoles = Array.from(document.querySelectorAll('.role-item'));
+let rfUpdating = false;
+
+// Build company options dynamically from whatever roles are on the page
+(function buildCoOptions() {
+  const seen = new Map();
+  allRoles.forEach(item => {
+    const co = item.dataset.co;
+    if (co && !seen.has(co)) {
+      const name = (item.querySelector('.role-co')?.textContent || co).replace(/\s*·.*$/, '').trim();
+      seen.set(co, name);
+    }
+  });
+  const sel = document.getElementById('rf-co');
+  [...seen.entries()].sort((a, b) => a[1].localeCompare(b[1])).forEach(([val, label]) => {
+    const opt = document.createElement('option');
+    opt.value = val; opt.textContent = label;
+    sel.appendChild(opt);
+  });
+})();
+
+function applyRoleFilters() {
+  const vals = {};
+  RF_FILTERS.forEach(f => { vals[f.key] = document.getElementById(f.id).value; });
+  allRoles.forEach(item => {
+    const match = RF_FILTERS.every(f => vals[f.key] === 'all' || item.dataset[f.key] === vals[f.key]);
+    item.style.display = match ? '' : 'none';
+  });
+  if (!rfUpdating) updateRoleDropdowns();
+}
+
+function updateRoleDropdowns() {
+  rfUpdating = true;
+  let needsRefilter = false;
+  RF_FILTERS.forEach(({ id, key }) => {
+    const select = document.getElementById(id);
+    const counts = {};
+    allRoles.forEach(item => {
+      const eligible = RF_FILTERS.every(f => {
+        if (f.id === id) return true;
+        const v = document.getElementById(f.id).value;
+        return v === 'all' || item.dataset[f.key] === v;
+      });
+      if (eligible && item.dataset[key]) counts[item.dataset[key]] = (counts[item.dataset[key]] || 0) + 1;
+    });
+    if (select.value !== 'all' && !counts[select.value]) {
+      select.value = 'all';
+      needsRefilter = true;
+    }
+    Array.from(select.options).slice(1).forEach(opt => {
+      opt.style.display = counts[opt.value] ? '' : 'none';
     });
   });
-});
+  rfUpdating = false;
+  if (needsRefilter) applyRoleFilters();
+}
+
+RF_FILTERS.forEach(f => document.getElementById(f.id).addEventListener('change', applyRoleFilters));
+updateRoleDropdowns();
 </script>
 </body>
 </html>

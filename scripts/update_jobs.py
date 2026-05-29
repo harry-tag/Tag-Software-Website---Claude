@@ -116,7 +116,44 @@ def fetch_workable_jobs():
     return json.loads(html[start:end])
 
 
-# ── Classify ───────────────────────────────────────────────────────────────────
+# ── Classify & normalise ───────────────────────────────────────────────────────
+
+def exp_level(title):
+    t = title.lower()
+    if any(k in t for k in ("intern", "internship", "co-op", "coop", "practicum", "student")):
+        return "intern"
+    if any(k in t for k in ("managing director", "vice president", " vp", "vp ", "chief", "svp", "evp", "head of", "c.t.o", "cto", "cfo", "coo", "ceo")):
+        return "senior"
+    if any(k in t for k in ("director", "senior", "sr.", "sr ", "principal", "lead ")):
+        return "senior"
+    if any(k in t for k in ("manager", "controller", "specialist", "consultant", "supervisor", "advisor")):
+        return "mid"
+    return "entry"
+
+
+def geo_key(location):
+    loc = location.lower()
+    if any(k in loc for k in ("telecommute", "remote", "télétravail", "work from home")):
+        return "remote"
+    if any(k in loc for k in ("canada", "toronto", "montreal", "montréal", "vancouver", "calgary", "ottawa", "winnipeg", ", on", ", qc", ", bc", ", ab", ", ns", ", nb", ", sk", "nova scotia")):
+        return "canada"
+    if any(k in loc for k in ("brazil", "brasil", "são paulo", "sao paulo", "rio de janeiro")):
+        return "brazil"
+    if any(k in loc for k in ("usa", "united states", ", ny", ", ca", ", tx", ", fl", ", il", ", wa", ", mi", ", oh", ", ga")):
+        return "usa"
+    if any(k in loc for k in ("uk", "united kingdom", "england", "london", "manchester", "birmingham", "scotland", "wales")):
+        return "uk"
+    if any(k in loc for k in ("germany", "deutschland", "berlin", "munich", "münchen", "hamburg")):
+        return "germany"
+    return re.sub(r"[^a-z0-9]+", "-", loc.split(",")[0].strip()).strip("-") or "other"
+
+
+def co_key(dept):
+    d = re.sub(r"\s*·.*$", "", dept).strip().lower()
+    if "tag software" in d:
+        return "tag"
+    return re.sub(r"[^a-z0-9]+", "-", d).strip("-")
+
 
 def classify(job):
     dept = job.get("department", "")
@@ -134,14 +171,17 @@ def first_location(job):
 
 # ── HTML generation ────────────────────────────────────────────────────────────
 
-def role_row(title, company_display, location, url, role_type):
+def role_row(title, company_display, location, url, role_type, dept=None):
+    exp = exp_level(title)
+    geo = geo_key(location)
+    co  = co_key(dept if dept is not None else company_display)
     badge = (
         '<span class="role-badge role-badge--tag">TAG</span>'
         if role_type == "tag"
         else '<span class="role-badge role-badge--portco">Portfolio</span>'
     )
     return (
-        f'      <div class="role-item" data-type="{role_type}">\n'
+        f'      <div class="role-item" data-type="{role_type}" data-exp="{exp}" data-geo="{geo}" data-co="{co}">\n'
         f'        <div class="role-main">\n'
         f'          <div class="role-title">{escape(title)}</div>\n'
         f'          <div class="role-co">{escape(company_display)}</div>\n'
@@ -209,7 +249,7 @@ def main():
             seen_titles.add(title.lower())
         else:
             portco_rows.append(
-                role_row(title, f"{dept} · {loc}", loc, url, "portco")
+                role_row(title, f"{dept} · {loc}", loc, url, "portco", dept=dept)
             )
 
     # Prepend LinkedIn TAG roles, skipping any already found on Workable
