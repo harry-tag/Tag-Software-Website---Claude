@@ -11,15 +11,17 @@ To add/remove portfolio companies from the page, edit FEATURED_PORTCOS below.
 
 import json
 import re
+import urllib.parse
 import urllib.request
 from html import escape
 from datetime import datetime, timezone
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 
+WORKABLE_COMPANY_ID = "i7bvgtD9zMBw8pksaJ6inV"
 WORKABLE_BOARD_URL = (
     "https://jobs.workable.com/company/"
-    "i7bvgtD9zMBw8pksaJ6inV/jobs-at-valsoft-corporation"
+    f"{WORKABLE_COMPANY_ID}/jobs-at-valsoft-corporation"
 )
 CAREERS_HTML_PATH = "careers.html"
 
@@ -27,6 +29,7 @@ CAREERS_HTML_PATH = "careers.html"
 TAG_COMPANIES = {
     "TAG Software Group",
     "TAG Software",
+    "Tag Software Group",  # alternate capitalisation seen on Workable
 }
 
 # Workable department names to feature as Portfolio roles.
@@ -76,44 +79,25 @@ LINKEDIN_TAG_ROLES = [
 # ── Fetch ──────────────────────────────────────────────────────────────────────
 
 def fetch_workable_jobs():
-    """Fetch the Workable board page and extract the embedded jobs JSON."""
-    req = urllib.request.Request(
-        WORKABLE_BOARD_URL,
-        headers={"User-Agent": "Mozilla/5.0 (compatible; TAG-Jobs-Bot/1.0)"},
-    )
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        html = resp.read().decode("utf-8")
-
-    # The page embeds jobs as: "jobs":[{...},{...}]
-    # Use a bracket-balanced extractor so HTML in description strings doesn't break it.
-    idx = html.find('"jobs":[')
-    if idx == -1:
-        raise RuntimeError("Could not find jobs array in Workable page HTML")
-
-    start = html.index("[", idx)
-    depth, in_string, escape_next = 0, False, False
-    end = start
-
-    for i, ch in enumerate(html[start:], start):
-        if escape_next:
-            escape_next = False
-            continue
-        if ch == "\\" and in_string:
-            escape_next = True
-            continue
-        if ch == '"':
-            in_string = not in_string
-            continue
-        if not in_string:
-            if ch == "[":
-                depth += 1
-            elif ch == "]":
-                depth -= 1
-                if depth == 0:
-                    end = i + 1
-                    break
-
-    return json.loads(html[start:end])
+    """Fetch all jobs from the Workable company API, paginating until complete."""
+    base_url = f"https://jobs.workable.com/api/v1/companies/{WORKABLE_COMPANY_ID}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; TAG-Jobs-Bot/1.0)",
+        "Accept": "application/json",
+        "Referer": WORKABLE_BOARD_URL,
+    }
+    all_jobs, page_token = [], None
+    while True:
+        url = base_url + (f"?pageToken={urllib.parse.quote(page_token)}" if page_token else "")
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        jobs = data.get("jobs", [])
+        all_jobs.extend(jobs)
+        page_token = data.get("nextPageToken")
+        if not page_token or not jobs:
+            break
+    return all_jobs
 
 
 # ── Classify & normalise ───────────────────────────────────────────────────────
@@ -165,7 +149,15 @@ def classify(job):
 
 
 def first_location(job):
+    """Return the most useful location string for a job.
+    Prefers a non-TELECOMMUTE entry; falls back to countryName from the location object."""
     locs = job.get("locations", [])
+    non_remote = [l for l in locs if l.upper() != "TELECOMMUTE"]
+    if non_remote:
+        return non_remote[0]
+    loc_obj = job.get("location", {})
+    if loc_obj.get("countryName"):
+        return loc_obj["countryName"]
     return locs[0] if locs else ""
 
 
