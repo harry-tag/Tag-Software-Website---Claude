@@ -103,32 +103,32 @@ FEATURED_PORTCOS = {
 
 # LinkedIn-sourced TAG roles — update when LinkedIn job IDs change.
 # These are merged with any TAG roles found on Workable (no duplicates).
-LINKEDIN_TAG_ROLES = [
-    {
-        "title": "M&A Internship — Fall Semester",
-        "company": "TAG Software Group",
-        "location": "Toronto, ON",
-        "url": "https://www.linkedin.com/jobs/view/4416980815/",
-    },
-    {
-        "title": "Managing Director (NAM)",
-        "company": "TAG Software Group",
-        "location": "Canada",
-        "url": "https://www.linkedin.com/jobs/view/4409440814/",
-    },
-    {
-        "title": "AI Customer Success Manager",
-        "company": "TAG Software Group",
-        "location": "Montreal, QC",
-        "url": "https://www.linkedin.com/jobs/view/4419555312/",
-    },
-    {
-        "title": "M&A Business Development Analyst",
-        "company": "TAG Software Group",
-        "location": "Brazil",
-        "url": "https://www.linkedin.com/jobs/view/4369927863/",
-    },
-]
+# LINKEDIN_TAG_ROLES = [
+#     {
+#         "title": "M&A Internship — Fall Semester",
+#         "company": "TAG Software Group",
+#         "location": "Toronto, ON",
+#         "url": "https://www.linkedin.com/jobs/view/4416980815/",
+#     },
+#     {
+#         "title": "Managing Director (NAM)",
+#         "company": "TAG Software Group",
+#         "location": "Canada",
+#         "url": "https://www.linkedin.com/jobs/view/4409440814/",
+#     },
+#     {
+#         "title": "AI Customer Success Manager",
+#         "company": "TAG Software Group",
+#         "location": "Montreal, QC",
+#         "url": "https://www.linkedin.com/jobs/view/4419555312/",
+#     },
+#     {
+#         "title": "M&A Business Development Analyst",
+#         "company": "TAG Software Group",
+#         "location": "Brazil",
+#         "url": "https://www.linkedin.com/jobs/view/4369927863/",
+#     },
+# ]
 
 
 # ── Fetch ──────────────────────────────────────────────────────────────────────
