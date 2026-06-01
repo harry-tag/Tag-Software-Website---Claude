@@ -43,7 +43,14 @@ FEATURED_PORTCOS = {
     "MPS Monitor - NEXERA",
     "NEXERA",
     "Unionware",
+    "UnionWare",          # alternate capitalisation seen on Workable
     "BluSynq",
+    "Celtrino",
+    "Forms Express",
+    "Freicon Software",   # Filaks Plus on Workable
+    "INPLAN",
+    "VHL Sistemas",
+    "Viova",
 }
 
 # LinkedIn-sourced TAG roles — update when LinkedIn job IDs change.
