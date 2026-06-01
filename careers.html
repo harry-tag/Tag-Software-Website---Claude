@@ -31,6 +31,7 @@
 }
 .rf-select:focus { outline: none; border-color: var(--ink-3); }
 .roles-filters { flex-wrap: wrap; }
+.role-loc { overflow: hidden; white-space: nowrap; max-width: 22ch; }
 .careers-intro {
   position: relative;
   overflow: hidden;
@@ -176,11 +177,9 @@
         </select>
         <select class="rf-select" id="rf-geo">
           <option value="all">Location</option>
-          <option value="canada">Canada</option>
-          <option value="brazil">Brazil</option>
-          <option value="remote">Remote</option>
-          <option value="usa">USA</option>
-          <option value="uk">UK</option>
+        </select>
+        <select class="rf-select" id="rf-city" style="display:none">
+          <option value="all">All cities</option>
         </select>
         <select class="rf-select" id="rf-co">
           <option value="all">Company</option>
@@ -238,24 +237,24 @@
       </div>
 
       <!-- Portfolio roles -->
-      <div class="role-item" data-type="portco" data-exp="mid" data-geo="remote" data-co="quorum">
+      <div class="role-item" data-type="portco" data-exp="mid" data-geo="canada" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Assistant Controller</div>
           <div class="role-co">Quorum</div>
         </div>
         <div class="role-meta">
-          <span class="role-loc">TELECOMMUTE</span>
+          <span class="role-loc" data-locs="St. John&#x27;s · Saskatoon · Winnipeg · Montreal">St. John&#x27;s · Saskatoon · Winnipeg · Montreal</span>
           <span class="role-badge role-badge--portco">Portfolio</span>
           <a href="https://jobs.workable.com/view/k23EbBjFcohtrubSova2k2/remote-assistant-controller-in-st.-john's-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
       </div>
-      <div class="role-item" data-type="portco" data-exp="entry" data-geo="remote" data-co="quorum">
+      <div class="role-item" data-type="portco" data-exp="entry" data-geo="canada" data-co="quorum">
         <div class="role-main">
           <div class="role-title">Financial Analyst, Corporate Finance</div>
           <div class="role-co">Quorum</div>
         </div>
         <div class="role-meta">
-          <span class="role-loc">TELECOMMUTE</span>
+          <span class="role-loc" data-locs="New Brunswick · Montreal · St. John&#x27;s">New Brunswick · Montreal · St. John&#x27;s</span>
           <span class="role-badge role-badge--portco">Portfolio</span>
           <a href="https://jobs.workable.com/view/6qEjWzGH4EAAxNE7SV1HNP/remote-financial-analyst%2C-corporate-finance-in-new-brunswick-at-valsoft-corporation" target="_blank" rel="noopener" class="role-apply">Apply →</a>
         </div>
@@ -386,16 +385,45 @@ mobNav.querySelectorAll('a').forEach(a => {
 });
 
 // Roles filters — faceted (each dropdown reflects the other active filters)
-const RF_FILTERS = [
-  { id: 'rf-exp', key: 'exp' },
-  { id: 'rf-geo', key: 'geo' },
-  { id: 'rf-co',  key: 'co'  },
-];
 const allRoles = Array.from(document.querySelectorAll('.role-item'));
 let rfUpdating = false;
 
-// Build company options dynamically from whatever roles are on the page
-(function buildCoOptions() {
+// Returns all individual location strings for a role (handles multi-city data-locs)
+function getRoleLocs(item) {
+  const el = item.querySelector('.role-loc');
+  if (!el) return [];
+  const src = el.dataset.locs || el.textContent.trim();
+  return src.split(' · ').map(s => s.trim()).filter(Boolean);
+}
+
+// Each filter: id, a match(item, val) fn, and a count(item) fn returning {optionValue: 1, ...}
+const GEO_LABELS = { canada: 'Canada', brazil: 'Brazil', usa: 'USA', uk: 'UK', remote: 'Remote' };
+
+const RF_FILTERS = [
+  {
+    id: 'rf-exp',
+    match: (item, val) => val === 'all' || item.dataset.exp === val,
+    count: (item) => item.dataset.exp ? { [item.dataset.exp]: 1 } : {},
+  },
+  {
+    id: 'rf-geo',
+    match: (item, val) => val === 'all' || item.dataset.geo === val,
+    count: (item) => item.dataset.geo ? { [item.dataset.geo]: 1 } : {},
+  },
+  {
+    id: 'rf-city',
+    match: (item, val) => val === 'all' || getRoleLocs(item).includes(val),
+    count: (item) => Object.fromEntries(getRoleLocs(item).map(loc => [loc, 1])),
+  },
+  {
+    id: 'rf-co',
+    match: (item, val) => val === 'all' || item.dataset.co === val,
+    count: (item) => item.dataset.co ? { [item.dataset.co]: 1 } : {},
+  },
+];
+
+// Build company options dynamically
+(function() {
   const seen = new Map();
   allRoles.forEach(item => {
     const co = item.dataset.co;
@@ -412,11 +440,37 @@ let rfUpdating = false;
   });
 })();
 
+// Build location options from distinct data-geo values present on the page
+(function() {
+  const seen = new Set();
+  allRoles.forEach(item => { if (item.dataset.geo) seen.add(item.dataset.geo); });
+  const sel = document.getElementById('rf-geo');
+  Object.entries(GEO_LABELS)
+    .filter(([k]) => seen.has(k))
+    .forEach(([k, label]) => {
+      const opt = document.createElement('option');
+      opt.value = k; opt.textContent = label;
+      sel.appendChild(opt);
+    });
+})();
+
+// Pre-populate all city options (faceted visibility handled by updateRoleDropdowns)
+(function() {
+  const seen = new Set();
+  allRoles.forEach(item => getRoleLocs(item).forEach(loc => seen.add(loc)));
+  const sel = document.getElementById('rf-city');
+  [...seen].sort().forEach(loc => {
+    const opt = document.createElement('option');
+    opt.value = loc; opt.textContent = loc;
+    sel.appendChild(opt);
+  });
+})();
+
 function applyRoleFilters() {
   const vals = {};
-  RF_FILTERS.forEach(f => { vals[f.key] = document.getElementById(f.id).value; });
+  RF_FILTERS.forEach(f => { vals[f.id] = document.getElementById(f.id).value; });
   allRoles.forEach(item => {
-    const match = RF_FILTERS.every(f => vals[f.key] === 'all' || item.dataset[f.key] === vals[f.key]);
+    const match = RF_FILTERS.every(f => f.match(item, vals[f.id]));
     item.style.display = match ? '' : 'none';
   });
   if (!rfUpdating) updateRoleDropdowns();
@@ -425,16 +479,15 @@ function applyRoleFilters() {
 function updateRoleDropdowns() {
   rfUpdating = true;
   let needsRefilter = false;
-  RF_FILTERS.forEach(({ id, key }) => {
+  RF_FILTERS.forEach(({ id, count }) => {
     const select = document.getElementById(id);
     const counts = {};
     allRoles.forEach(item => {
       const eligible = RF_FILTERS.every(f => {
         if (f.id === id) return true;
-        const v = document.getElementById(f.id).value;
-        return v === 'all' || item.dataset[f.key] === v;
+        return f.match(item, document.getElementById(f.id).value);
       });
-      if (eligible && item.dataset[key]) counts[item.dataset[key]] = (counts[item.dataset[key]] || 0) + 1;
+      if (eligible) Object.keys(count(item)).forEach(k => { counts[k] = (counts[k] || 0) + 1; });
     });
     if (select.value !== 'all' && !counts[select.value]) {
       select.value = 'all';
@@ -444,12 +497,37 @@ function updateRoleDropdowns() {
       opt.style.display = counts[opt.value] ? '' : 'none';
     });
   });
+  // Show city sub-filter only when a specific country is selected
+  const citySelect = document.getElementById('rf-city');
+  const geoVal = document.getElementById('rf-geo').value;
+  if (geoVal === 'all') {
+    citySelect.style.display = 'none';
+    citySelect.value = 'all';
+  } else {
+    citySelect.style.display = '';
+  }
+
   rfUpdating = false;
   if (needsRefilter) applyRoleFilters();
 }
 
 RF_FILTERS.forEach(f => document.getElementById(f.id).addEventListener('change', applyRoleFilters));
 updateRoleDropdowns();
+
+// Swap overflowing multi-city location spans to "Multiple locations"
+function checkLocOverflow() {
+  document.querySelectorAll('.role-loc[data-locs]').forEach(el => {
+    el.textContent = el.dataset.locs;
+    if (el.scrollWidth > el.offsetWidth) {
+      el.title = el.dataset.locs;
+      el.textContent = 'Multiple locations';
+    } else {
+      el.removeAttribute('title');
+    }
+  });
+}
+checkLocOverflow();
+window.addEventListener('resize', checkLocOverflow);
 </script>
 </body>
 </html>

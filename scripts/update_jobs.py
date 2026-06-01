@@ -135,7 +135,7 @@ def geo_key(location):
     loc = location.lower()
     if any(k in loc for k in ("telecommute", "remote", "télétravail", "work from home")):
         return "remote"
-    if any(k in loc for k in ("canada", "toronto", "montreal", "montréal", "vancouver", "calgary", "ottawa", "winnipeg", ", on", ", qc", ", bc", ", ab", ", ns", ", nb", ", sk", "nova scotia")):
+    if any(k in loc for k in ("canada", "toronto", "montreal", "montréal", "vancouver", "calgary", "ottawa", "winnipeg", ", on", ", qc", ", bc", ", ab", ", ns", ", nb", ", sk", "nova scotia", "st. john", "st john", "saskatoon", "new brunswick", "fredericton", "halifax", "moncton", "regina", "edmonton", "quebec", "ontario", "british columbia", "alberta", "manitoba", "saskatchewan")):
         return "canada"
     if any(k in loc for k in ("brazil", "brasil", "são paulo", "sao paulo", "rio de janeiro")):
         return "brazil"
@@ -169,13 +169,30 @@ def first_location(job):
     return locs[0] if locs else ""
 
 
+def city_from_workable_url(url):
+    """Extract a readable city name from the Workable job URL slug."""
+    m = re.search(r"-in-(.+?)-at-valsoft", url, re.IGNORECASE)
+    if not m:
+        return None
+    slug = m.group(1)
+
+    def cap(word):
+        if "'" in word:
+            a, _, b = word.partition("'")
+            return a.capitalize() + "'" + b
+        return word.capitalize()
+
+    return " ".join(cap(p) for p in slug.split("-") if p)
+
+
 # ── HTML generation ────────────────────────────────────────────────────────────
 
-def role_row(title, company_display, location, url, role_type, dept=None, display_location=None):
+def role_row(title, company_display, location, url, role_type, dept=None, display_location=None, all_locations=None):
     exp = exp_level(title)
     geo = geo_key(location)
     co  = co_key(dept if dept is not None else company_display)
     loc_text = display_location if display_location is not None else location
+    locs_attr = f' data-locs="{escape(loc_text)}"' if all_locations and len(all_locations) > 1 else ""
     badge = (
         '<span class="role-badge role-badge--tag">TAG</span>'
         if role_type == "tag"
@@ -188,7 +205,7 @@ def role_row(title, company_display, location, url, role_type, dept=None, displa
         f'          <div class="role-co">{escape(company_display)}</div>\n'
         f'        </div>\n'
         f'        <div class="role-meta">\n'
-        f'          <span class="role-loc">{escape(loc_text)}</span>\n'
+        f'          <span class="role-loc"{locs_attr}>{escape(loc_text)}</span>\n'
         f'          {badge}\n'
         f'          <a href="{url}" target="_blank" rel="noopener" class="role-apply">Apply →</a>\n'
         f'        </div>\n'
@@ -260,10 +277,17 @@ def main():
     deduped_portco_rows = []
     for (title, dept), entries in portco_groups.items():
         first_loc, first_url = entries[0]
-        unique_locs = list(dict.fromkeys(loc for loc, _ in entries))
-        loc_display = " · ".join(unique_locs)
+        # Prefer city names extracted from URL slugs; fall back to raw location strings
+        cities = list(dict.fromkeys(
+            city_from_workable_url(url) or loc
+            for loc, url in entries
+        ))
+        loc_display = " · ".join(cities)
+        # Use the first extracted city name (not "TELECOMMUTE") so geo_key classifies correctly
+        geo_loc = cities[0] if cities else first_loc
         deduped_portco_rows.append(
-            role_row(title, dept, first_loc, first_url, "portco", dept=dept, display_location=loc_display)
+            role_row(title, dept, geo_loc, first_url, "portco",
+                     dept=dept, display_location=loc_display, all_locations=cities)
         )
     portco_rows = deduped_portco_rows
 
