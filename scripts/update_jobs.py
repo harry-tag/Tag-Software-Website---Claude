@@ -204,7 +204,7 @@ def update_careers_html(roles_html):
 
     updated, n = re.subn(
         r"(<!-- JOBS-START -->).*?(<!-- JOBS-END -->)",
-        f"\\1\n\n{roles_html}\n\n",
+        f"\\1\n\n{roles_html}\n\n\\2",
         content,
         count=1,
         flags=re.DOTALL,
