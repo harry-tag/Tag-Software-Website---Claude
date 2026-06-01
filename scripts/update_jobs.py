@@ -35,22 +35,70 @@ TAG_COMPANIES = {
 # Workable department names to feature as Portfolio roles.
 # Add/remove companies here to control what appears on the page.
 FEATURED_PORTCOS = {
+
     "Quorum",
+
     "OASES Commsoft",
+
     "ScholarChip",
+
     "ScholarChip Corporation",
+
     "MPS Monitor",
+
     "MPS Monitor - NEXERA",
+
     "NEXERA",
+
     "Unionware",
+
     "UnionWare",          # alternate capitalisation seen on Workable
-    "BluSynq",
+
     "Celtrino",
+
     "Forms Express",
+
     "Freicon Software",   # Filaks Plus on Workable
+
     "INPLAN",
+
     "VHL Sistemas",
+
     "Viova",
+
+    # --- added from portfolio page ---
+    "Quantum",            # quantum.aero — aviation baggage management
+
+    "Enrich",             # enrichsoftware.com — truck leasing / fleet asset mgmt
+
+    "WorkDynamics",       # workdynamics.com — workflow & document management
+
+    "Fastmedic",          # fastmedic.com.br — public healthcare management
+
+    "S&W Technologies",   # swtechnologies.com — occupational health & safety
+
+    "ACOM Systems",       # acom.com — document management & payment automation
+
+    "Optima Energy",      # optima.energy — utility bill management & sustainability
+
+    "Open Software",      # opensoftware.it — public administration & law enforcement
+
+    "Sadie",              # sadieautomotive.ai — AI voice agent for automotive dealerships
+
+    "SARS Software Products",  # sarsgrid.com — higher education database software
+
+    "Zafire",             # zafire.aero — aviation & service management
+
+    "Visium KMS",         # visiumkms.com — quality, safety & compliance
+
+    "DigitalEd",          # digitaled.com — online STEM learning & assessment
+
+    "ICL",                # iclsystems.com — finished vehicle supply chain logistics
+
+    "AIM Computer Solutions",  # aimcom.com — ERP for automotive production suppliers
+
+    "Bids&Tenders",       # bidsandtenders.com — digital procurement platform
+
 }
 
 # LinkedIn-sourced TAG roles — update when LinkedIn job IDs change.
