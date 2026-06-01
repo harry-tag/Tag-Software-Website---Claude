@@ -171,10 +171,11 @@ def first_location(job):
 
 # ── HTML generation ────────────────────────────────────────────────────────────
 
-def role_row(title, company_display, location, url, role_type, dept=None):
+def role_row(title, company_display, location, url, role_type, dept=None, display_location=None):
     exp = exp_level(title)
     geo = geo_key(location)
     co  = co_key(dept if dept is not None else company_display)
+    loc_text = display_location if display_location is not None else location
     badge = (
         '<span class="role-badge role-badge--tag">TAG</span>'
         if role_type == "tag"
@@ -187,7 +188,7 @@ def role_row(title, company_display, location, url, role_type, dept=None):
         f'          <div class="role-co">{escape(company_display)}</div>\n'
         f'        </div>\n'
         f'        <div class="role-meta">\n'
-        f'          <span class="role-loc">{escape(location)}</span>\n'
+        f'          <span class="role-loc">{escape(loc_text)}</span>\n'
         f'          {badge}\n'
         f'          <a href="{url}" target="_blank" rel="noopener" class="role-apply">Apply →</a>\n'
         f'        </div>\n'
@@ -248,9 +249,23 @@ def main():
             )
             seen_titles.add(title.lower())
         else:
-            portco_rows.append(
-                role_row(title, f"{dept} · {loc}", loc, url, "portco", dept=dept)
-            )
+            portco_rows.append((title, dept, loc, url))
+
+    # Deduplicate portco jobs: group same (title, dept) into one listing with all cities
+    from collections import defaultdict
+    portco_groups = defaultdict(list)
+    for title, dept, loc, url in portco_rows:
+        portco_groups[(title, dept)].append((loc, url))
+
+    deduped_portco_rows = []
+    for (title, dept), entries in portco_groups.items():
+        first_loc, first_url = entries[0]
+        unique_locs = list(dict.fromkeys(loc for loc, _ in entries))
+        loc_display = " · ".join(unique_locs)
+        deduped_portco_rows.append(
+            role_row(title, dept, first_loc, first_url, "portco", dept=dept, display_location=loc_display)
+        )
+    portco_rows = deduped_portco_rows
 
     # Prepend LinkedIn TAG roles, skipping any already found on Workable
     linkedin_rows = [
